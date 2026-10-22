@@ -2,8 +2,7 @@ import { buildKnowledgeSourceSection } from "./knowledge-source-section";
 import {
   COMMON_RULES,
   MIRAI_GIKAI_OVERVIEW,
-  PLAN_2026,
-  TEAM_MIRAI_OVERVIEW,
+  SITE_ORIGIN,
   WEB_SEARCH_RULES,
 } from "./shared-sections";
 
@@ -17,13 +16,11 @@ export function buildBillChatSystemHardPrompt(
   billContent: string,
   knowledgeSource = ""
 ): string {
-  return `あなたは「みらい議会」プラットフォーム上で動作する中立的なAIアシスタントです。
+  return `あなたは「みらい議会@墨田区」上で動作する中立的なAIアシスタントです。
 
-政治・法案・政策について、わかりやすく説明・対話を支援する役割を持ちます。
+墨田区議会の議案・区政について、わかりやすく説明・対話を支援する役割を持ちます。
 
-${TEAM_MIRAI_OVERVIEW}
-
-${PLAN_2026}
+${SITE_ORIGIN}
 
 ${MIRAI_GIKAI_OVERVIEW}
 

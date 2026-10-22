@@ -15,6 +15,9 @@ export const routes = {
   developersOpenDataApi: () => "/developers/open-data-api" as const,
   interviewDataTerms: () => "/developers/interview-data-terms" as const,
 
+  // ── 会議予定 ──────────────────────────────────────
+  schedule: () => "/schedule" as const,
+
   // ── 議案 ──────────────────────────────────────────
   billsList: () => "/bills" as const,
   billDetail: (billId: string) => `/bills/${billId}` as const,
@@ -48,5 +51,5 @@ export const routes = {
     `/report/${reportId}/chat-log` as const,
 
   // ── 国会セッション ────────────────────────────────
-  kokkaiSessionBills: (slug: string) => `/kokkai/${slug}/bills` as const,
+  sessionBills: (slug: string) => `/sessions/${slug}/bills` as const,
 } as const;

@@ -27,10 +27,10 @@ interface ProgressStepProps {
 
 // 基本ステップ定義
 const BASE_STEPS = [
-  { label: "法案\n提出" },
-  { label: "衆議院\n審議" },
-  { label: "参議院\n審議" },
-  { label: "法案\n成立" },
+  { label: "議案\n提出" },
+  { label: "委員会\n審査" },
+  { label: "本会議\n採決" },
+  { label: "可決" },
 ] as const;
 
 // ステータスバッジコンポーネント
@@ -98,6 +98,20 @@ export function BillStatusProgress({
   originatingHouse,
   statusNote,
 }: BillStatusProgressProps) {
+  // 委員会報告・特別委員会は採決がないので、進捗ではなく日付と委員会だけを示す
+  if (status === "reported" || status === "special_committee") {
+    return (
+      <>
+        <h2 className="text-[22px] font-bold mb-4">
+          {status === "reported" ? "👉 委員会への報告" : "👉 特別委員会の調査"}
+        </h2>
+        <div className="bg-white rounded-lg border p-6 flex justify-center">
+          <StatusBadge message={statusNote || "委員会報告"} />
+        </div>
+      </>
+    );
+  }
+
   const isPreparing = status === "preparing";
   const currentStep = getCurrentStep(status);
 

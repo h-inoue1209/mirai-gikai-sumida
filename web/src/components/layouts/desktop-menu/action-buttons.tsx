@@ -1,5 +1,6 @@
 import { LinkButton } from "@/components/top/link-button";
 import { EXTERNAL_LINKS } from "@/config/external-links";
+import { routes } from "@/lib/routes";
 
 /**
  * デスクトップメニュー: アクションボタン（サイドバー内）
@@ -8,27 +9,28 @@ export function DesktopMenuActionButtons() {
   return (
     <div className="flex flex-col gap-3">
       <LinkButton
-        href={EXTERNAL_LINKS.ABOUT_NOTE}
+        href={`${routes.home()}#about`}
+        target="_self"
         icon={{
-          src: "/icons/note-icon.png",
-          alt: "note",
+          src: "/img/logo.svg",
+          alt: "",
           width: 20,
-          height: 20,
+          height: 18,
         }}
       >
-        みらい議会とは
+        このサイトについて
       </LinkButton>
 
       <LinkButton
-        href={EXTERNAL_LINKS.DONATION}
+        href={EXTERNAL_LINKS.CONTACT_LINE}
         icon={{
-          src: "/icons/heart-icon.svg",
-          alt: "寄附",
+          src: "/icons/sns/icon_line.png",
+          alt: "LINE",
           width: 20,
           height: 20,
         }}
       >
-        寄附で応援する
+        LINEで問い合わせる
       </LinkButton>
     </div>
   );

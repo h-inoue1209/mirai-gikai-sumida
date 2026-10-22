@@ -2,13 +2,12 @@
  * 外部リンク定数
  */
 export const EXTERNAL_LINKS = {
-  REPORT: "https://forms.gle/wJXXMt6cv2ZdiCgg6",
-  ABOUT_NOTE: "https://note.com/team_mirai_jp/n/nd1656aa5f86d",
-  DONATION: "https://team-mir.ai/support/donation",
-  TEAM_MIRAI_ABOUT: "https://team-mir.ai/about",
-  TERMS: "https://team-mir.ai/terms",
-  PRIVACY: "https://team-mir.ai/privacy",
-  FAQ: "https://team-mirai.notion.site/FAQ-28cf6f56bae180bd84e7f7ae80f806a1",
+  // 誤りの報告・問い合わせは運営者（井上ひろき）の LINE 公式アカウントで受ける。
+  // 本家のフォームはチームみらいに届くので使わない。
+  CONTACT_LINE: "https://lin.ee/HaHeS7R",
+  REPORT: "https://lin.ee/HaHeS7R",
+  // 元にした本家「みらい議会」（チームみらい）
+  ORIGINAL_SERVICE: "https://gikai.team-mir.ai/",
   FORK_GUIDELINES_NOTE: "https://note.com/team_mirai_jp/n/nc59ec347e8c7",
-  GITHUB_REPO: "https://github.com/team-mirai/mirai-gikai",
+  GITHUB_REPO: "https://github.com/（墨田区版の公開リポジトリURL・未作成）",
 } as const;

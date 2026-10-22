@@ -1,0 +1,155 @@
+import type { CouncilMeeting, CouncilPeriod } from "../types";
+
+/**
+ * 墨田区議会は通年議会（墨田区議会基本条例第7条）。会期は5月1日〜翌年4月30日で、
+ * 閉会はない。本会議を開く「議会期間」（6月・9月・11月・2月議会）は、
+ * 会議日程の「本会議（○月議会初日）」「本会議（○月議会最終日）」から求める。
+ * 招集議会・緊急議会・臨時会は、その日だけの議会期間とする。
+ */
+export function extractCouncilPeriods(
+  meetings: Pick<CouncilMeeting, "name" | "meeting_date" | "category">[]
+): CouncilPeriod[] {
+  const starts = new Map<string, string>();
+  const ends = new Map<string, string>();
+  for (const m of meetings) {
+    if (m.category !== "plenary") continue;
+    const matched = /（(.+議会)(初日|最終日)）/.exec(m.name);
+    if (matched) {
+      (matched[2] === "初日" ? starts : ends).set(matched[1], m.meeting_date);
+      continue;
+    }
+    // 招集議会・緊急議会・臨時会は1日だけの議会期間として扱う
+    const oneDay = /（(招集議会|.+緊急議会|.+臨時会)）/.exec(m.name);
+    if (oneDay) {
+      starts.set(oneDay[1], m.meeting_date);
+      ends.set(oneDay[1], m.meeting_date);
+    }
+  }
+  const periods: CouncilPeriod[] = [];
+  for (const [name, start_date] of starts) {
+    const end_date = ends.get(name);
+    if (end_date) periods.push({ name, start_date, end_date });
+  }
+  return periods.sort((a, b) => a.start_date.localeCompare(b.start_date));
+}
+
+/** 日付を `YYYY-MM-DD` にする。日本時間の Date を渡す前提。 */
+export function toDateKey(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/** 議会年度の開始年。5月始まり（墨田区議会通年議会実施要綱第2条）。 */
+export function councilYearOf(date: Date): number {
+  return date.getMonth() + 1 >= 5 ? date.getFullYear() : date.getFullYear() - 1;
+}
+
+/** 例：2026 → 令和8年度 */
+export function formatCouncilYear(year: number): string {
+  return `令和${year - 2018}年度`;
+}
+
+export type CouncilStatus = {
+  councilYear: number;
+  /** 今日を含む議会期間。議会期間外なら null。 */
+  currentPeriod: CouncilPeriod | null;
+  /** 今日より後に始まる最初の議会期間。 */
+  nextPeriod: CouncilPeriod | null;
+};
+
+export function getCouncilStatus(
+  periods: CouncilPeriod[],
+  today: string,
+  councilYear: number
+): CouncilStatus {
+  return {
+    councilYear,
+    currentPeriod:
+      periods.find((p) => p.start_date <= today && today <= p.end_date) ?? null,
+    nextPeriod: periods.find((p) => p.start_date > today) ?? null,
+  };
+}
+
+/** 今日以降に終わる会議（開催中の複数日の会議を含む）。 */
+export function isUpcoming(
+  meeting: Pick<CouncilMeeting, "meeting_date" | "end_date">,
+  today: string
+): boolean {
+  return (meeting.end_date ?? meeting.meeting_date) >= today;
+}
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/** `YYYY-MM-DD` 同士の日数差。 */
+export function daysBetween(from: string, to: string): number {
+  const toUtc = (d: string) => {
+    const [y, m, day] = d.split("-").map(Number);
+    return Date.UTC(y, m - 1, day);
+  };
+  return Math.round((toUtc(to) - toUtc(from)) / MS_PER_DAY);
+}
+
+const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+
+/** 例：2026-11-26 → 11月26日（木） */
+export function formatMeetingDate(date: string): string {
+  const [y, m, d] = date.split("-").map(Number);
+  const weekday = WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+  return `${m}月${d}日（${weekday}）`;
+}
+
+/** 例：10月28日（水）〜30日（金）。同じ月なら後ろの月を省く。 */
+export function formatMeetingDateRange(
+  start: string,
+  end: string | null
+): string {
+  if (!end) return formatMeetingDate(start);
+  const sameMonth = start.slice(0, 7) === end.slice(0, 7);
+  const endLabel = formatMeetingDate(end);
+  return `${formatMeetingDate(start)}〜${sameMonth ? endLabel.replace(/^\d+月/, "") : endLabel}`;
+}
+
+/** 開始日の早い順に、最初の `days` 日分の会議だけを残す。同じ日の会議は途中で切らない。 */
+export function takeFirstDays<
+  T extends { meeting_date: string; end_date: string | null },
+>(meetings: T[], days: number): T[] {
+  const keys: string[] = [];
+  return meetings.filter((m) => {
+    const key = `${m.meeting_date}_${m.end_date ?? ""}`;
+    if (!keys.includes(key)) {
+      if (keys.length >= days) return false;
+      keys.push(key);
+    }
+    return true;
+  });
+}
+
+/** 例：2026-11-26 → 11.26 */
+export function formatShortDate(date: string): string {
+  const [, m, d] = date.split("-").map(Number);
+  return `${m}.${d}`;
+}
+
+export const CATEGORY_LABELS: Record<CouncilMeeting["category"], string> = {
+  plenary: "本会議",
+  standing: "常任委員会",
+  special: "特別委員会",
+  steering: "議会運営委員会",
+  other: "その他",
+};
+
+/** 議会期間に入らない議案・報告（閉会中の委員会など）の見出し。 */
+export const OUTSIDE_PERIOD_LABEL = "議会期間の外（委員会など）";
+
+/** `YYYY-MM-DD` が入る議会期間の名前。どの期間にも入らなければ OUTSIDE_PERIOD_LABEL。 */
+export function periodLabelFor(date: string, periods: CouncilPeriod[]): string {
+  return (
+    periods.find((p) => p.start_date <= date && date <= p.end_date)?.name ??
+    OUTSIDE_PERIOD_LABEL
+  );
+}
+
+/** ISO の日時を日本時間の `YYYY-MM-DD` にする。 */
+export function toJstDateKey(iso: string): string {
+  return new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
+}

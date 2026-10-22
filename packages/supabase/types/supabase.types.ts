@@ -145,6 +145,9 @@ export type Database = {
           knowledge_source: string | null
           name: string
           originating_house: Database["public"]["Enums"]["house_enum"]
+          public_comment_end: string | null
+          public_comment_start: string | null
+          public_comment_url: string | null
           publish_status: Database["public"]["Enums"]["bill_publish_status"]
           publish_status_order: number | null
           published_at: string | null
@@ -169,6 +172,9 @@ export type Database = {
           knowledge_source?: string | null
           name: string
           originating_house: Database["public"]["Enums"]["house_enum"]
+          public_comment_end?: string | null
+          public_comment_start?: string | null
+          public_comment_url?: string | null
           publish_status?: Database["public"]["Enums"]["bill_publish_status"]
           publish_status_order?: number | null
           published_at?: string | null
@@ -193,6 +199,9 @@ export type Database = {
           knowledge_source?: string | null
           name?: string
           originating_house?: Database["public"]["Enums"]["house_enum"]
+          public_comment_end?: string | null
+          public_comment_start?: string | null
+          public_comment_url?: string | null
           publish_status?: Database["public"]["Enums"]["bill_publish_status"]
           publish_status_order?: number | null
           published_at?: string | null
@@ -332,6 +341,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      council_meetings: {
+        Row: {
+          category: string
+          council_year: number
+          created_at: string
+          document_url: string | null
+          end_date: string | null
+          gallery: string | null
+          id: string
+          meeting_date: string
+          name: string
+          place: string | null
+          source_url: string
+          start_time: string | null
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          council_year: number
+          created_at?: string
+          document_url?: string | null
+          end_date?: string | null
+          gallery?: string | null
+          id?: string
+          meeting_date: string
+          name: string
+          place?: string | null
+          source_url: string
+          start_time?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          council_year?: number
+          created_at?: string
+          document_url?: string | null
+          end_date?: string | null
+          gallery?: string | null
+          id?: string
+          meeting_date?: string
+          name?: string
+          place?: string | null
+          source_url?: string
+          start_time?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       diet_sessions: {
         Row: {
@@ -1462,6 +1522,9 @@ export type Database = {
         | "enacted"
         | "rejected"
         | "preparing"
+        | "reported"
+        | "plan"
+        | "special_committee"
       chat_role_enum: "user" | "system" | "assistant"
       difficulty_level_enum: "normal" | "hard"
       house_enum: "HR" | "HC"
@@ -1635,6 +1698,9 @@ export const Constants = {
         "enacted",
         "rejected",
         "preparing",
+        "reported",
+        "plan",
+        "special_committee",
       ],
       chat_role_enum: ["user", "system", "assistant"],
       difficulty_level_enum: ["normal", "hard"],

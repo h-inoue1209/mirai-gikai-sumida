@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { RubySafeLineClamp } from "@/components/ruby-safe-line-clamp";
 import { Card } from "@/components/ui/card";
+import { getDateLabel } from "@/features/bills/shared/utils/bill-status";
 import { routes } from "@/lib/routes";
 import { formatDateWithDots } from "@/lib/utils/date";
 import type { BillWithContent } from "../../../shared/types";
@@ -55,7 +56,8 @@ export function BillSearchCard({ bill }: { bill: BillWithContent }) {
               <BillStatusBadge status={bill.status} className="w-fit" />
               {bill.submitted_date && (
                 <span className="text-xs font-medium text-mirai-text-muted">
-                  {formatDateWithDots(bill.submitted_date)} 提出
+                  {formatDateWithDots(bill.submitted_date)}{" "}
+                  {getDateLabel(bill.status)}
                 </span>
               )}
             </div>

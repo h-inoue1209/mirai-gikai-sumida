@@ -5,11 +5,14 @@ import { getInterviewConfig } from "@/features/interview-config/server/loaders/g
 import { getPublicReportsByBillId } from "@/features/interview-report/server/loaders/get-public-reports-by-bill-id";
 import { BillTopicsPreviewSection } from "@/features/user-topic-analysis/server/components/bill-topics-preview-section";
 import { getPublicTopicAnalysis } from "@/features/user-topic-analysis/server/loaders/get-public-topic-analysis";
+import { getJapanTime } from "@/lib/utils/date";
 import { BillDetailClient } from "../../../client/components/bill-detail/bill-detail-client";
 import { BillDisclaimer } from "../../../client/components/bill-detail/bill-disclaimer";
 import { BillStatusProgress } from "../../../client/components/bill-detail/bill-status-progress";
 import { MiraiStanceCard } from "../../../client/components/bill-detail/mirai-stance-card";
+import { PlanPhaseProgress } from "../../../client/components/bill-detail/plan-phase-progress";
 import type { BillWithContent } from "../../../shared/types";
+import { getPlanPhase } from "../../../shared/utils/plan-phase";
 import { BillShareButtons } from "../share/bill-share-buttons";
 import { BillContent } from "./bill-content";
 import { BillDetailHeader } from "./bill-detail-header";
@@ -30,6 +33,12 @@ export async function BillDetailLayout({
       getPublicTopicAnalysis(bill.id),
     ]);
 
+  // 行政計画は区のパブコメ期間で段階が変わる。AIインタビューは「意見募集中」の間だけ出す
+  const isPlan = bill.status === "plan";
+  const planPhase = isPlan ? getPlanPhase(bill, getJapanTime()) : null;
+  const showInterview =
+    interviewConfig != null && (!isPlan || planPhase === "opinion");
+
   return (
     <div className="container mx-auto pb-8 max-w-4xl">
       {/*
@@ -41,22 +50,32 @@ export async function BillDetailLayout({
       <BillDetailClient
         bill={bill}
         currentDifficulty={currentDifficulty}
-        hasInterviewConfig={interviewConfig != null}
+        hasInterviewConfig={showInterview}
       >
         <BillDetailHeader
           bill={bill}
-          hasInterviewConfig={interviewConfig != null}
+          hasInterviewConfig={showInterview}
           opinionCount={topicAnalysis?.total_opinions ?? 0}
           topicCount={topicAnalysis?.topics.length ?? 0}
         />
         <Container>
           {/* 議案ステータス進捗 */}
           <div className="my-8">
-            <BillStatusProgress
-              status={bill.status}
-              originatingHouse={bill.originating_house}
-              statusNote={bill.status_note}
-            />
+            {planPhase ? (
+              <PlanPhaseProgress
+                phase={planPhase}
+                statusNote={bill.status_note}
+                publicCommentStart={bill.public_comment_start}
+                publicCommentEnd={bill.public_comment_end}
+                publicCommentUrl={bill.public_comment_url}
+              />
+            ) : (
+              <BillStatusProgress
+                status={bill.status}
+                originatingHouse={bill.originating_house}
+                statusNote={bill.status_note}
+              />
+            )}
           </div>
 
           <BillContent bill={bill} />
@@ -73,7 +92,7 @@ export async function BillDetailLayout({
           />
         </div>
 
-        {interviewConfig != null && (
+        {showInterview && (
           <div className="my-8">
             <InterviewLandingSection billId={bill.id} />
           </div>

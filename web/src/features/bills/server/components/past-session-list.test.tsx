@@ -45,11 +45,11 @@ describe("PastSessionList", () => {
     ).toBeInTheDocument();
     const links = screen.getAllByRole("link");
     expect(links).toHaveLength(2);
-    expect(links[0]).toHaveAttribute("href", "/kokkai/220-rinji/bills");
-    expect(links[0]).toHaveTextContent("2025年 第220回臨時国会");
+    expect(links[0]).toHaveAttribute("href", "/sessions/220-rinji/bills");
+    expect(links[0]).toHaveTextContent("第220回臨時国会");
     expect(links[0]).toHaveTextContent("2025.10.24〜12.17");
     expect(links[0]).toHaveTextContent("23件");
-    expect(links[1]).toHaveAttribute("href", "/kokkai/219-rinji/bills");
+    expect(links[1]).toHaveAttribute("href", "/sessions/219-rinji/bills");
   });
 
   it("会期がなければ何も出さない", () => {

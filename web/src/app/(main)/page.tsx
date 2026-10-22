@@ -1,7 +1,7 @@
 import { Container } from "@/components/layouts/container";
 import { About } from "@/components/top/about";
 import { ComingSoonSection } from "@/components/top/coming-soon-section";
-import { TeamMirai } from "@/components/top/team-mirai";
+import { Operator } from "@/components/top/operator";
 import { getDifficultyLevel } from "@/features/bill-difficulty/server/loaders/get-difficulty-level";
 import { BillDisclaimer } from "@/features/bills/client/components/bill-detail/bill-disclaimer";
 import { BillSearchOverlay } from "@/features/bills/client/components/bill-search-overlay";
@@ -19,10 +19,15 @@ import { chatBillName } from "@/features/bills/shared/utils/chat-bill-name";
 import { pickHomeSections } from "@/features/bills/shared/utils/pick-home-sections";
 import { countTagChipItems } from "@/features/bills/shared/utils/tag-chip-items";
 import { HomeChatClient } from "@/features/chat/client/components/home-chat-client";
-import { CurrentDietSession } from "@/features/diet-sessions/client/components/current-diet-session";
+import { CouncilStatus } from "@/features/council-meetings/server/components/council-status";
+import { UpcomingMeetingsSection } from "@/features/council-meetings/server/components/upcoming-meetings-section";
+import { loadCouncilSchedule } from "@/features/council-meetings/server/loaders/load-council-schedule";
+import { takeFirstDays } from "@/features/council-meetings/shared/utils/council-period";
 import { getCurrentDietSession } from "@/features/diet-sessions/server/loaders/get-current-diet-session";
-import { getLatestClosedDietSession } from "@/features/diet-sessions/server/loaders/get-latest-closed-diet-session";
 import { getJapanTime } from "@/lib/utils/date";
+
+/** トップの「これからの会議」に出す日数。同じ日の会議はまとめて出す。 */
+const UPCOMING_MEETING_DAYS = 3;
 
 /** カテゴリタブの「注目」から飛ばす先。 */
 const FEATURED_ANCHOR = "featured";
@@ -40,14 +45,14 @@ export default async function Home() {
       pastSessions,
     },
     currentSession,
-    latestClosedSession,
+    councilSchedule,
     currentDifficulty,
     suggestableBills,
     featuredTags,
   ] = await Promise.all([
     loadHomeData(),
     getCurrentDietSession(japanTime),
-    getLatestClosedDietSession(japanTime),
+    loadCouncilSchedule(japanTime),
     getDifficultyLevel(),
     getSuggestableBills(),
     getFeaturedTags(),
@@ -78,11 +83,12 @@ export default async function Home() {
 
   return (
     <>
-      {/* 本日の国会セクション */}
-      <CurrentDietSession
-        session={currentSession}
-        closedSession={latestClosedSession}
-        now={japanTime}
+      {/* 本日の区議会セクション（通年議会なので閉会中は出さない） */}
+      <CouncilStatus
+        status={councilSchedule.status}
+        todayMeetings={councilSchedule.todayMeetings}
+        nextMeetings={councilSchedule.nextMeetings}
+        today={councilSchedule.today}
       />
 
       <Container>
@@ -108,6 +114,14 @@ export default async function Home() {
               inSession で出し分けない。
             */}
             <InterviewOpenBillSection bills={interviewOpenBills} />
+
+            {/* これからの会議（区議会サイトの会議日程から取り込み） */}
+            <UpcomingMeetingsSection
+              meetings={takeFirstDays(
+                councilSchedule.upcoming,
+                UPCOMING_MEETING_DAYS
+              )}
+            />
 
             {/*
               注目の法案は会期中だけ出す。閉会中に「注目」を掲げても、審議が
@@ -149,11 +163,11 @@ export default async function Home() {
       )}
 
       <Container>
-        {/* みらい議会とは セクション */}
+        {/* このサイトについて セクション */}
         <About />
 
-        {/* チームみらいについて セクション */}
-        <TeamMirai />
+        {/* 運営者（墨田区議会議員）の紹介 */}
+        <Operator />
 
         {/* 免責事項 */}
         <BillDisclaimer />

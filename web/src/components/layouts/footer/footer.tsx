@@ -30,10 +30,10 @@ export function Footer() {
 function FooterLogoSection() {
   return (
     <div className="flex flex-col items-center text-center mb-9">
-      <Link href={routes.home()} aria-label="みらい議会 トップページ">
+      <Link href={routes.home()} aria-label="みらい議会@墨田区 トップページ">
         <Image
           src="/img/logo.svg"
-          alt="みらい議会"
+          alt="みらい議会@墨田区"
           width={150}
           height={128}
           className="h-auto"
@@ -94,7 +94,12 @@ function FooterPolicies() {
 function FooterCopyright() {
   return (
     <div className="text-center text-sm font-medium text-slate-800">
-      © 2025 Team Mirai All rights Reserved
+      <p className="mb-3 text-xs">
+        これは政党チームみらいが運営しているものではありません
+      </p>
+      <p className="text-xs">
+        本サイトは「みらい議会」（AGPL-3.0）を改変した試作版です（2026年10月改変）
+      </p>
     </div>
   );
 }

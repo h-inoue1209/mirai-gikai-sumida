@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { DietSession } from "@/features/diet-sessions/shared/types";
+import { formatSessionPeriod } from "@/features/diet-sessions/shared/utils/format-session-period";
 import { routes } from "@/lib/routes";
 import { CompactBillCard } from "../../client/components/bill-list/compact-bill-card";
 import type { BillWithContent } from "../../shared/types";
@@ -29,10 +30,8 @@ export function PreviousSessionSection({
     return null;
   }
 
-  const sessionBillsUrl = routes.kokkaiSessionBills(session.slug);
-  const startDate = new Date(session.start_date);
-  const endDate = new Date(session.end_date);
-  const sessionDescription = `${startDate.getFullYear()}.${startDate.getMonth() + 1}月〜${endDate.getMonth() + 1}月に実施された${session.name}`;
+  const sessionBillsUrl = routes.sessionBills(session.slug);
+  const sessionDescription = `${formatSessionPeriod(session.start_date, session.end_date)}（通年）`;
 
   return (
     <section className="flex flex-col gap-6">
@@ -48,7 +47,7 @@ export function PreviousSessionSection({
           />
         </h2>
         <p className="text-sm font-bold text-primary-accent">
-          過去の国会に提出された法案
+          過去の定例会に提出された議案
         </p>
       </div>
 
@@ -57,8 +56,7 @@ export function PreviousSessionSection({
         <Link href={sessionBillsUrl as Route} className="group">
           <h3 className="text-[22px] font-bold text-black leading-[1.48] flex items-center gap-1.5">
             <span className="flex items-center gap-4">
-              {new Date(session.start_date).getFullYear()}年 {session.name}
-              の提出法案
+              {session.name}の議案
               <span className="shrink-0">{totalBillCount}件</span>
             </span>
             <ChevronRight className="h-6 w-6 text-gray-600 group-hover:translate-x-0.5 transition-transform" />

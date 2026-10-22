@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DIFFICULTY } from "@/features/bill-difficulty/shared/types";
+import { getDateLabel } from "@/features/bills/shared/utils/bill-status";
 import { getInterviewLPLink } from "@/features/interview-config/shared/utils/interview-links";
 import { routes } from "@/lib/routes";
 import { formatDateWithDots } from "@/lib/utils/date";
@@ -70,7 +71,10 @@ export async function BillDetailHeader({
           <BillStatusBadge status={bill.status} className="w-fit" />
           <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
             {bill.submitted_date && (
-              <time>{formatDateWithDots(bill.submitted_date)} 提出</time>
+              <time>
+                {formatDateWithDots(bill.submitted_date)}{" "}
+                {getDateLabel(bill.status)}
+              </time>
             )}
           </div>
         </div>

@@ -7,12 +7,39 @@ import {
   LegalParagraph,
   LegalSectionTitle,
 } from "@/components/layouts/legal-page-layout";
+import { EXTERNAL_LINKS } from "@/config/external-links";
 import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
-  title: "プライバシーポリシー | みらい議会",
-  description: "みらい議会のプライバシーポリシー",
+  title: "プライバシーポリシー | みらい議会@墨田区",
+  description: "みらい議会@墨田区のプライバシーポリシー",
 };
+
+const GA_OPT_OUT_URL = "https://tools.google.com/dlpage/gaoptout?hl=ja";
+
+/** 外部サービスへの送信先。送信先を変えたらここを直す。 */
+const EXTERNAL_SERVICES = [
+  {
+    name: "Vercel（AI Gateway）を経由して、OpenAI・Anthropic・Google",
+    data: "対話・インタビューの内容",
+    purpose: "AIの応答・要約をつくるため、不適切な入力を判定するため",
+  },
+  {
+    name: "Supabase",
+    data: "識別子、対話・回答の内容",
+    purpose: "データの保存",
+  },
+  {
+    name: "Google アナリティクス",
+    data: "閲覧したページ、Cookieの識別子",
+    purpose: "アクセスの集計",
+  },
+  {
+    name: "ルビ表示サービス（Rubyful）",
+    data: "閲覧しているページの文章",
+    purpose: "ふりがなを表示するため（ルビ機能を使ったときのみ）",
+  },
+];
 
 export default function PrivacyPage() {
   return (
@@ -20,141 +47,146 @@ export default function PrivacyPage() {
       className="bg-transparent pt-24 md:pt-12"
       title="プライバシーポリシー"
       enLabel="Privacy Policy"
-      description="チームみらい（以下「当組織」といいます）における個人情報の取り扱いについてご説明します。"
+      description="墨田区議会議員の井上ひろき（以下「運営者」といいます。）は、「みらい議会@墨田区」（以下「本サービス」といいます。）で取り扱う情報について、以下のとおり定めます。"
     >
       <Container className="space-y-8">
-        <p className="text-sm text-mirai-text-muted">
-          最終更新日：2026年7月29日
-        </p>
+        <p className="text-sm text-mirai-text-muted">制定日：2026年10月22日</p>
 
         <section className="space-y-4">
-          <LegalSectionTitle>1. 個人情報の定義</LegalSectionTitle>
+          <LegalSectionTitle>1. 取得する情報</LegalSectionTitle>
           <LegalParagraph>
-            個人情報とは、以下のような情報であって、特定の個人を識別することができるものを指します。
+            本サービスでは、氏名・住所・電話番号・メールアドレスなど、個人を特定する情報の入力を求めません。取得するのは次の情報です。
           </LegalParagraph>
           <LegalList
             items={[
-              "氏名、年齢、性別、住所、電話番号、職業、メールアドレス",
-              "個人ごとに割り当てられたIDやパスワード、その他識別可能な記号",
-              "当組織の提供するサービスであるみらい議会におけるAIインタビュー機能（以下「みらい議会AIインタビュー機能」といいます。）を通じて取得される対話ログ、音声データ、および行動履歴",
-              "他の情報と容易に照合することができ、それにより特定の個人を識別できることとなるもの",
+              "利用者を区別するための識別子：ログインなしで使えるよう、ブラウザごとに自動で割り当てるID",
+              "AIとの対話の内容：AIアシスタントへの質問と応答",
+              "AIインタビューの回答：議案や行政計画などについてのAIインタビューでの回答と、その要約",
+              "利用状況：閲覧したページ、操作の記録、不正対策のためのアクセス元の情報（IPアドレスなど）",
             ]}
+          />
+          <LegalParagraph>
+            対話や回答の中に、利用する方が自ら個人情報を書き込んだ場合は、その情報も取得することになります。個人情報は書き込まないでください。
+          </LegalParagraph>
+        </section>
+
+        <section className="space-y-4">
+          <LegalSectionTitle>2. 利用目的</LegalSectionTitle>
+          <LegalList
+            items={[
+              "本サービスの提供・運営と、お問い合わせへの対応",
+              "不正な利用の防止",
+              "本サービスの改善",
+              "運営者が区議会での質問や政策提案を考える際の参考（AIインタビューの回答）",
+              "回答した方が同意した回答の、本サービス上での公開と、オープンデータとしての提供",
+              "個人がわからない形に集計した結果の、区議会での発言や活動報告での紹介",
+            ]}
+          />
+          <LegalParagraph>
+            選挙運動や、運営者の後援会・政党の勧誘には使いません。
+          </LegalParagraph>
+        </section>
+
+        <section className="space-y-4">
+          <LegalSectionTitle>3. 外部のサービスへの送信</LegalSectionTitle>
+          <LegalParagraph>
+            本サービスは、次の外部サービスを使っています。対話やインタビューの内容は、応答をつくるためにAIの提供会社に送られます。
+          </LegalParagraph>
+          <LegalList
+            items={EXTERNAL_SERVICES.map((s) => ({
+              id: s.name,
+              content: (
+                <>
+                  <span className="font-bold">{s.name}</span>：{s.data}（
+                  {s.purpose}）
+                </>
+              ),
+            }))}
           />
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>2. 個人情報の収集方法と使用範囲</LegalSectionTitle>
+          <LegalSectionTitle>4. 第三者への提供</LegalSectionTitle>
           <LegalParagraph>
-            個人情報をご提供いただく際には、ユーザーの同意に基づいて行うことを原則とします。また、当組織は、以下に定める目的での利用を除き、個人情報を無断で利用することはありません。
-          </LegalParagraph>
-          <LegalList
-            items={[
-              "ユーザーが利用する当組織のサービス（以下「当組織サービス」といいます。）の運営およびそれに伴うユーザーとのやりとり・情報提供",
-              "当組織サービスの安全な運営に必要な不正対策",
-              "当組織サービスの改善・新規開発",
-              "当組織における政策立案",
-              "当組織サービスに係る情報提供・広告配信",
-              "上記の各利用目的に必要な各種調査・分析",
-              "「3. 第三者への情報提供について」に定める場合における第三者への開示・提供",
-            ]}
-          />
-          <LegalParagraph>
-            なお、みらい議会AIインタビュー機能を通じて当組織が取得した回答内容については、当組織は、以下の通り取り扱います。
+            次の場合を除き、取得した情報を第三者に提供しません。
           </LegalParagraph>
           <LegalList
             items={[
               {
-                id: "publish",
+                id: "consent",
                 content: (
                   <>
-                    <span className="font-semibold text-slate-800">公開：</span>
-                    ユーザーが回答時に公開に同意した場合に限り、当ウェブサイトや報告書等で公開されることがあります。本人が公開に同意しなかった回答内容は、第三者に公開または提供されることはありません。
-                  </>
-                ),
-              },
-              {
-                id: "open-data",
-                content: (
-                  <>
-                    <span className="font-semibold text-slate-800">
-                      第三者への提供（オープンデータ公開）：
-                    </span>
-                    インタビューデータを、別途定める「
+                    本人の同意がある場合。AIインタビューの回答のうち公開に同意したものは、本サービス上で公開し、「
                     <Link
                       href={routes.interviewDataTerms()}
                       className="text-primary-accent underline"
                     >
-                      みらい議会AIインタビューデータ利用規約
+                      みらい議会@墨田区AIインタビューデータ利用規約
                     </Link>
-                    」に同意する者であれば誰でもダウンロード可能なオープンデータとして第三者に提供することがあります。
+                    」に基づき、誰でもダウンロードできるオープンデータとして提供します。
                   </>
                 ),
               },
-              {
-                id: "statistics",
-                content: (
-                  <>
-                    <span className="font-semibold text-slate-800">
-                      統計的利用：
-                    </span>
-                    取得したデータは、個人を特定できない統計情報に加工した上で、第三者へ公表する場合があります。
-                  </>
-                ),
-              },
+              "個人がわからない形に集計した情報として提供する場合",
+              "法令に基づく開示の請求があった場合",
+              "人の生命・身体・財産を守るために必要で、本人の同意を得ることが難しい場合",
             ]}
           />
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>3. 第三者への情報提供について</LegalSectionTitle>
+          <LegalSectionTitle>5. 安全管理</LegalSectionTitle>
           <LegalParagraph>
-            以下のいずれかに該当する場合を除き、個人情報を第三者に開示・提供することはありません。
-          </LegalParagraph>
-          <LegalList
-            items={[
-              "「2. 個人情報の収集方法と使用範囲」に定めるみらい議会AIインタビュー機能を通じて当組織が取得した回答内容を、本人が公開に同意した範囲で公開する場合、および別途定める「みらい議会AIインタビューデータ利用規約」に同意する者であれば誰でもダウンロード可能なオープンデータとして第三者に提供する場合",
-              "ユーザー本人の同意がある場合",
-              "統計的なデータなど、個人を特定できない状態で提供する場合",
-              "法令に基づく開示請求（裁判所・警察等）があった場合",
-              "不正アクセスや規約違反など、緊急の対応が必要と判断された場合",
-            ]}
-          />
-        </section>
-
-        <section className="space-y-4">
-          <LegalSectionTitle>4. 安全管理措置</LegalSectionTitle>
-          <LegalParagraph>
-            個人情報の適切な管理を行うために、責任者を定め、厳正な管理体制を構築しています。AI処理に伴うデータ保管についても、最新のセキュリティ対策を講じます。
+            取得した情報は、アクセスできる人を運営者に限り、通信の暗号化などの対策をとって管理します。
           </LegalParagraph>
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>5. Cookie（クッキー）について</LegalSectionTitle>
+          <LegalSectionTitle>6. Cookie（クッキー）</LegalSectionTitle>
           <LegalParagraph>
-            当ウェブサイトでは、利便性向上とアクセス解析（Googleアナリティクス等）のためにCookieを使用しています。これらは匿名で収集され、個人を特定するものではありません。
+            本サービスは、利便性の向上とアクセスの集計（Googleアナリティクス）のためにCookieを使います。Cookieは、ブラウザの設定で無効にできます。Googleアナリティクスによる計測は、Googleが提供する
+            <a
+              href={GA_OPT_OUT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-accent underline"
+            >
+              Google アナリティクス オプトアウト アドオン
+            </a>
+            でも止められます。
           </LegalParagraph>
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>6. 保管期間と廃棄</LegalSectionTitle>
+          <LegalSectionTitle>7. 保管期間と削除</LegalSectionTitle>
           <LegalParagraph>
-            取得した個人情報および対話ログは、法令（政治資金規正法等）に基づき必要な期間（原則7年間）保管した後、適切な方法で廃棄・削除します。なお、本人の同意に基づき公開された回答内容、および個人を特定できないよう加工した上でオープンデータとして提供されたデータなど当組織が管理していない情報は、廃棄・削除を行うことはできないため、継続して公開・提供されることがあります。
+            対話ログとAIインタビューの回答は、取得から4年間、または本サービスを終了するまでのいずれか短い期間保管し、その後削除します。公開した回答も、この期間を過ぎたら公開をやめて削除します。なお、オープンデータとして既に第三者が取得したデータは、運営者が管理していないため削除できません。
           </LegalParagraph>
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>7. 改訂と通知</LegalSectionTitle>
+          <LegalSectionTitle>8. 開示・訂正・削除のご相談</LegalSectionTitle>
           <LegalParagraph>
-            本ポリシーは必要に応じて改訂されます。改訂内容はウェブサイトへの掲載をもって効力を生じるものとし、個別の通知は行いません。
+            ご自身の対話や回答の削除、回答の公開の停止などのご相談は、下記までご連絡ください。ログインのない仕組みのため、ご本人のものと確認できない場合は対応できないことがあります。
+          </LegalParagraph>
+          <LegalParagraph>
+            LINE公式アカウント：
+            <a
+              href={EXTERNAL_LINKS.CONTACT_LINE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-accent underline"
+            >
+              {EXTERNAL_LINKS.CONTACT_LINE}
+            </a>
           </LegalParagraph>
         </section>
 
         <section className="space-y-4">
-          <LegalSectionTitle>8. お問い合わせ窓口</LegalSectionTitle>
+          <LegalSectionTitle>9. 改訂</LegalSectionTitle>
           <LegalParagraph>
-            個人情報の確認・修正・削除、またはみらい議会AIインタビュー機能の回答公開の停止等のご相談は、下記までご連絡ください。
+            本ポリシーは必要に応じて改訂します。改訂した内容は、本サービスに掲載した時点から効力を持ちます。
           </LegalParagraph>
-          <LegalParagraph>support@team-mir.ai</LegalParagraph>
         </section>
       </Container>
     </LegalPageLayout>

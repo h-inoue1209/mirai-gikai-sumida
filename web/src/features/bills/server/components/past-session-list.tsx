@@ -21,7 +21,7 @@ export function PastSessionList({ sessions }: PastSessionListProps) {
           過去の会期一覧
         </h3>
         <p className="text-xs font-medium text-mirai-text">
-          会期ごとの提出法案をまとめて見られます
+          議会年度（5月〜翌年4月）ごとの議案・報告をまとめて見られます
         </p>
       </div>
 
@@ -29,12 +29,12 @@ export function PastSessionList({ sessions }: PastSessionListProps) {
         {sessions.map(({ session, billCount }) => (
           <li key={session.id}>
             <Link
-              href={routes.kokkaiSessionBills(session.slug) as Route}
+              href={routes.sessionBills(session.slug) as Route}
               className="flex items-center gap-3 px-4 py-3.5 text-mirai-text transition-colors hover:bg-muted/50"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="text-[15px] font-bold leading-normal">
-                  {session.start_date.slice(0, 4)}年 {session.name}
+                  {session.name}
                 </span>
                 <span className="text-xs font-medium text-mirai-text-muted">
                   {formatSessionPeriod(session.start_date, session.end_date)}

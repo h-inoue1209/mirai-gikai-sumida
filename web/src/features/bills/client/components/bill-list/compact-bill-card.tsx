@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { formatDateWithDots } from "@/lib/utils/date";
 import type { BillWithContent } from "../../../shared/types";
 import { getArticleReviewState } from "../../../shared/utils/article-review-state";
+import { getDateLabel } from "../../../shared/utils/bill-status";
 import { ReviewCompleteBadge } from "../bill-detail/review-status-banner";
 import { BillStatusBadge } from "./bill-status-badge";
 
@@ -17,7 +18,8 @@ interface CompactBillCardProps {
  */
 export function CompactBillCard({ bill, className }: CompactBillCardProps) {
   const displayTitle = bill.bill_content?.title || bill.name;
-  const statusLabel = bill.status === "enacted" ? "成立" : "提出";
+  // 議会年度の一覧では可決済みの議案も提出日で並ぶので、日付には提出・報告などを付ける
+  const statusLabel = getDateLabel(bill.status);
 
   return (
     <Card

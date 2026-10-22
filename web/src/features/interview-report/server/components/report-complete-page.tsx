@@ -17,6 +17,9 @@ import { parseOpinions } from "../../shared/utils/format-utils";
 import { countCharacters } from "../../shared/utils/report-utils";
 import { getExpertRegistrationStatus } from "../loaders/get-expert-registration-status";
 
+/** 墨田区版は有識者の連絡先を集めない。 */
+const SHOW_EXPERT_REGISTRATION = false;
+
 interface ReportCompletePageProps {
   reportId: string;
 }
@@ -116,10 +119,13 @@ export async function ReportCompletePage({
             roleDescription={report.role_description}
             opinions={opinions}
           >
-            {/* 有識者リスト登録バナー */}
-            {isExpertRole && !isExpertRegistered && (
-              <ExpertRegistrationSection />
-            )}
+            {/*
+              有識者リスト登録バナー。本家はチームみらいから連絡するための連絡先を集めるが、
+              墨田区版は連絡先を預からない方針のため出さない（SHOW_EXPERT_REGISTRATION）。
+            */}
+            {SHOW_EXPERT_REGISTRATION &&
+              isExpertRole &&
+              !isExpertRegistered && <ExpertRegistrationSection />}
           </ReportContent>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { RubySafeLineClamp } from "@/components/ruby-safe-line-clamp";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDateLabel } from "@/features/bills/shared/utils/bill-status";
 import { formatDateWithDots } from "@/lib/utils/date";
 import type { BillWithContent } from "../../../shared/types";
 import { getArticleReviewState } from "../../../shared/utils/article-review-state";
@@ -60,7 +61,10 @@ export function BillCard({ bill }: BillCardProps) {
                 <BillStatusBadge status={bill.status} className="w-fit" />
                 <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                   {bill.submitted_date && (
-                    <time>{formatDateWithDots(bill.submitted_date)} 提出</time>
+                    <time>
+                      {formatDateWithDots(bill.submitted_date)}{" "}
+                      {getDateLabel(bill.status)}
+                    </time>
                   )}
                 </div>
               </div>

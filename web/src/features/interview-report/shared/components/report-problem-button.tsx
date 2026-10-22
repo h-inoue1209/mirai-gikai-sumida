@@ -16,7 +16,7 @@ export function ReportProblemButton() {
         height={20}
         className="shrink-0"
       />
-      問題を報告する
+      誤りをLINEで報告する
     </a>
   );
 }

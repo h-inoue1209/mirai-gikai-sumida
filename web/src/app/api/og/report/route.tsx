@@ -61,7 +61,7 @@ export async function GET(request: Request) {
         alignItems: "center",
         justifyContent: "center",
         backgroundImage:
-          "linear-gradient(177deg, rgb(226, 246, 243) 0%, rgb(238, 246, 226) 100%)",
+          "linear-gradient(177deg, rgb(243, 247, 252) 0%, rgb(212, 228, 246) 100%)",
       }}
     >
       {/* グラデーションborder用ラッパー */}
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
           height: 560,
           borderRadius: 30,
           backgroundImage:
-            "linear-gradient(-30deg, rgb(188, 236, 211) 1%, rgb(100, 216, 198) 99%)",
+            "linear-gradient(-30deg, rgb(141, 180, 230) 1%, rgb(42, 94, 168) 99%)",
           padding: 6,
           position: "relative",
         }}
@@ -104,7 +104,7 @@ export async function GET(request: Request) {
             {truncatedSummary}
           </div>
 
-          {/* 法案名 */}
+          {/* 議案名 */}
           <div
             style={{
               display: "flex",
@@ -112,7 +112,7 @@ export async function GET(request: Request) {
               maxHeight: OG_BILL_NAME_MAX_HEIGHT,
               fontSize: 32,
               fontWeight: 800,
-              color: "#0f8472",
+              color: "#2a5ea8",
               lineHeight: 1.5,
               overflow: "hidden",
               wordBreak: "break-all",
@@ -138,7 +138,7 @@ export async function GET(request: Request) {
             borderBottomLeftRadius: 30,
             borderTopRightRadius: 30,
             backgroundImage:
-              "linear-gradient(-30deg, rgb(188, 236, 211) 1%, rgb(100, 216, 198) 99%)",
+              "linear-gradient(-30deg, rgb(212, 228, 246) 1%, rgb(141, 180, 230) 99%)",
           }}
         >
           <span
@@ -149,7 +149,7 @@ export async function GET(request: Request) {
               letterSpacing: "0.03em",
             }}
           >
-            みらい議会
+            みらい議会@墨田区
           </span>
         </div>
 
@@ -157,7 +157,7 @@ export async function GET(request: Request) {
         {logoDataUrl && (
           // biome-ignore lint/performance/noImgElement: ignore
           <img
-            alt="チームみらいロゴ"
+            alt="みらい議会@墨田区のロゴ"
             src={logoDataUrl}
             width={189}
             height={160}

@@ -13,6 +13,9 @@ export const BILL_STATUS_GROUPS = [
   "waiting",
   "enacted",
   "rejected",
+  "reported",
+  "plan",
+  "special_committee",
 ] as const;
 
 export type BillStatusGroup = (typeof BILL_STATUS_GROUPS)[number];
@@ -21,8 +24,11 @@ export const BILL_STATUS_GROUP_LABELS: Record<BillStatusGroup, string> = {
   all: "すべて",
   deliberating: "審議中",
   waiting: "審議待ち",
-  enacted: "成立",
+  enacted: "可決",
   rejected: "否決",
+  reported: "委員会報告",
+  plan: "行政計画",
+  special_committee: "特別委員会",
 };
 
 /**
@@ -46,6 +52,12 @@ export function toBillStatusGroup(
       return "enacted";
     case "rejected":
       return "rejected";
+    case "reported":
+      return "reported";
+    case "plan":
+      return "plan";
+    case "special_committee":
+      return "special_committee";
     default:
       return "waiting";
   }
@@ -69,6 +81,9 @@ export function countByStatusGroup(
     waiting: 0,
     enacted: 0,
     rejected: 0,
+    reported: 0,
+    plan: 0,
+    special_committee: 0,
   };
   for (const bill of bills) {
     counts[toBillStatusGroup(bill.status)] += 1;

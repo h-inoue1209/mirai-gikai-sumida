@@ -8,6 +8,10 @@ const STATUS_TO_STEP: Record<BillStatusEnum, number> = {
   in_receiving_house: 3,
   enacted: 4,
   rejected: 4,
+  // 採決のない委員会報告は進捗を出さない（BillStatusProgress で分岐）
+  reported: 0,
+  plan: 0,
+  special_committee: 0,
 } as const;
 
 // プログレス比率
@@ -20,7 +24,7 @@ export function getStatusMessage(
   status: BillStatusEnum,
   statusNote: string | null | undefined
 ): string {
-  if (status === "preparing") return "法案提出前";
+  if (status === "preparing") return "議案提出前";
   return statusNote || "";
 }
 
