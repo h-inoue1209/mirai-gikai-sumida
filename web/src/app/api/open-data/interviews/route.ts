@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     return jsonNoStore(
       {
         error:
-          "みらい議会AIインタビューデータ利用規約に同意の上、agreeToTerms=true を指定してください",
+          "みらい議会@墨田区AIインタビューデータ利用規約に同意の上、agreeToTerms=true を指定してください",
         termsUrl,
       },
       403

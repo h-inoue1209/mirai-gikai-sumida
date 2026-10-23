@@ -58,11 +58,11 @@ function StaticDisclosureSection() {
             <ul className="mt-2 space-y-2 list-none">
               <li>
                 <span className="font-bold">AI学習への非利用：</span>
-                入力されたデータがAIモデル（Anthropic社等）の学習に再利用されることはありません。
+                入力されたデータがAIモデル（OpenAI社等）の学習に再利用されることはありません。
               </li>
               <li>
                 <span className="font-bold">活用の範囲：</span>
-                回答内容は、党内における政策検討、およびAIを用いた統計的分析に限定して活用いたします。
+                回答内容は、運営者（井上ひろき）の議会活動・政策検討、およびAIを用いた統計的分析に限定して活用いたします。
               </li>
               <li>
                 <span className="font-bold">分析プロセスの透明化：</span>
