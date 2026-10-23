@@ -100,7 +100,8 @@ export async function handleChatRequest({
     promptProvider
   );
   // Model configuration
-  const model = deps?.model ?? AI_MODELS.gpt5_4_mini_fast;
+  // 墨田区版は AI Gateway の無料枠で動かすため、無料枠で使える gpt-4.1-mini にする
+  const model = deps?.model ?? AI_MODELS.gpt4_1_mini;
   const modelName =
     typeof model === "string" ? model : (model.modelId ?? "unknown");
 

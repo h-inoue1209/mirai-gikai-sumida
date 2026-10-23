@@ -155,6 +155,8 @@ export const bicycleInterview = {
   name: "自転車活用推進計画 中間見直し前の意見募集",
   status: "public" as const,
   mode: "loop" as const,
+  // AI Gateway の無料枠では Claude（既定の claude-haiku-4.5）が使えないため
+  chat_model: "openai/gpt-4.1-mini",
   estimated_duration: 5,
   themes: [
     "自転車の使い方",
