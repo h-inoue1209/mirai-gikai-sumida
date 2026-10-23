@@ -9,5 +9,5 @@ export const EXTERNAL_LINKS = {
   // 元にした本家「みらい議会」（チームみらい）
   ORIGINAL_SERVICE: "https://gikai.team-mir.ai/",
   FORK_GUIDELINES_NOTE: "https://note.com/team_mirai_jp/n/nc59ec347e8c7",
-  GITHUB_REPO: "https://github.com/（墨田区版の公開リポジトリURL・未作成）",
+  GITHUB_REPO: "https://github.com/h-inoue1209/mirai-gikai-sumida",
 } as const;
