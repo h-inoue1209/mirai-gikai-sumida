@@ -64,6 +64,7 @@ export function CouncilStatus({
             label="本日の会議"
             dateLabel={formatMeetingDateRange(today, null)}
             meetings={todayMeetings}
+            boxed
           />
         ) : (
           nextMeetings.length > 0 && (
@@ -185,34 +186,55 @@ function MeetingDay({
   label,
   dateLabel,
   meetings,
+  boxed = false,
 }: {
   label: string;
   dateLabel: string;
   meetings: CouncilMeeting[];
+  /** 白背景の枠で囲む（本日の会議）。 */
+  boxed?: boolean;
 }) {
   return (
-    <div className="-mt-2 flex flex-col gap-1">
-      <span className="text-[13px] font-bold text-mirai-text-secondary">
-        {label}
+    <div
+      className={`-mt-2 flex flex-col gap-2 ${boxed ? "rounded-xl bg-white/70 px-4 py-3" : ""}`}
+    >
+      <span className="flex flex-wrap items-baseline gap-x-2 text-[13px] font-bold text-mirai-text-secondary">
+        <span>{label}</span>
+        <span className="whitespace-nowrap text-mirai-brand-teal-deep">
+          {dateLabel}
+        </span>
+        {meetings[0]?.start_time && (
+          <span className="whitespace-nowrap text-xs">
+            {meetings[0].start_time}
+          </span>
+        )}
       </span>
-      <span className="text-[26px] font-bold leading-tight text-mirai-brand-teal-deep">
-        {dateLabel}
-      </span>
-      <ul className="flex flex-col gap-0.5">
-        {meetings.map((m) => (
-          <li
-            key={m.id}
-            className="text-[15px] font-bold leading-6 text-mirai-brand-teal-deep"
-          >
-            {m.name}
-            {m.start_time && (
-              <span className="ml-2 text-xs font-bold text-mirai-text-secondary">
-                {m.start_time}
-                {m.place && `・${m.place}`}
+      <ul className="flex flex-col gap-2">
+        {meetings.map((m, i) => {
+          // 1件目の時間は日付の横に出す。同じ日の2件目以降は場所の横に。
+          const time = i > 0 ? m.start_time : null;
+          return (
+            <li key={m.id} className="flex flex-col gap-0.5">
+              <span className="text-[26px] font-bold leading-tight text-mirai-brand-teal-deep">
+                {m.name}
               </span>
-            )}
-          </li>
-        ))}
+              {(m.place || time) && (
+                <span className="flex flex-wrap items-baseline gap-x-2">
+                  {m.place && (
+                    <span className="text-[15px] font-bold text-mirai-brand-teal-deep">
+                      {m.place}
+                    </span>
+                  )}
+                  {time && (
+                    <span className="text-xs font-bold text-mirai-text-secondary">
+                      {time}
+                    </span>
+                  )}
+                </span>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
