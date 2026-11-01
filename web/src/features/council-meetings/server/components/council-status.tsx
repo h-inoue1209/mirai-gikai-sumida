@@ -26,8 +26,9 @@ type CouncilStatusProps = {
  * 区議会の状況カード。
  *
  * 墨田区議会は通年議会なので「閉会中」は出さない。議会期間（○月議会）の中なら
- * 進行バーを、外なら次の議会期間までの日数を出す。その上に次に会議が開かれる日を
- * 大きく出す。今日の会議があれば並べる。
+ * 進行バーを、外なら次の議会期間までの日数を出す。その上に、今日の会議があれば
+ * 今日の会議を、無ければ次に会議が開かれる日を大きく出す。今日の会議がある日は
+ * 次の開会日を下に1行で小さく出す。
  */
 export function CouncilStatus({
   status,
@@ -36,6 +37,7 @@ export function CouncilStatus({
   today,
 }: CouncilStatusProps) {
   const { councilYear, currentPeriod, nextPeriod } = status;
+  const hasToday = todayMeetings.length > 0;
 
   // ヒーローを外したのでこのカードが最上部に来る。ヘッダーは fixed で
   // main-layout の上余白は md 以上にしか効かないため、モバイルでは
@@ -57,7 +59,24 @@ export function CouncilStatus({
           </span>
         </div>
 
-        {nextMeetings.length > 0 && <NextMeetingDay meetings={nextMeetings} />}
+        {hasToday ? (
+          <MeetingDay
+            label="本日の会議"
+            dateLabel={formatMeetingDateRange(today, null)}
+            meetings={todayMeetings}
+          />
+        ) : (
+          nextMeetings.length > 0 && (
+            <MeetingDay
+              label="次の開会日"
+              dateLabel={formatMeetingDateRange(
+                nextMeetings[0].meeting_date,
+                nextMeetings[0].end_date
+              )}
+              meetings={nextMeetings}
+            />
+          )
+        )}
 
         {currentPeriod ? (
           <PeriodProgressBar period={currentPeriod} today={today} />
@@ -65,25 +84,8 @@ export function CouncilStatus({
           nextPeriod && <NextPeriod period={nextPeriod} today={today} />
         )}
 
-        {todayMeetings.length > 0 && (
-          <div className="-mt-1 flex flex-col gap-1.5 rounded-xl bg-white/70 px-4 py-3">
-            <span className="text-[13px] font-bold text-mirai-text-secondary">
-              本日の会議
-            </span>
-            <ul className="flex flex-col gap-1">
-              {todayMeetings.map((m) => (
-                <li key={m.id} className="text-sm font-bold leading-6">
-                  {m.name}
-                  {m.start_time && (
-                    <span className="ml-2 text-xs font-bold text-mirai-text-secondary">
-                      {m.start_time}
-                      {m.place && `・${m.place}`}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {hasToday && nextMeetings.length > 0 && (
+          <NextMeetingCompact meetings={nextMeetings} />
         )}
       </div>
       <div className="flex items-baseline justify-between gap-2 pt-2">
@@ -178,17 +180,23 @@ function NextPeriod({
   );
 }
 
-/** 次に会議が開かれる日。本会議・委員会を問わず、一番目立たせる。 */
-function NextMeetingDay({ meetings }: { meetings: CouncilMeeting[] }) {
-  const [first] = meetings;
-
+/** 今日の会議、または次に会議が開かれる日。本会議・委員会を問わず、一番目立たせる。 */
+function MeetingDay({
+  label,
+  dateLabel,
+  meetings,
+}: {
+  label: string;
+  dateLabel: string;
+  meetings: CouncilMeeting[];
+}) {
   return (
     <div className="-mt-2 flex flex-col gap-1">
       <span className="text-[13px] font-bold text-mirai-text-secondary">
-        次の開会日
+        {label}
       </span>
       <span className="text-[26px] font-bold leading-tight text-mirai-brand-teal-deep">
-        {formatMeetingDateRange(first.meeting_date, first.end_date)}
+        {dateLabel}
       </span>
       <ul className="flex flex-col gap-0.5">
         {meetings.map((m) => (
@@ -206,6 +214,22 @@ function NextMeetingDay({ meetings }: { meetings: CouncilMeeting[] }) {
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+/** 今日の会議がある日の「次の開会日」。日付と会議名を1行で小さく出す。 */
+function NextMeetingCompact({ meetings }: { meetings: CouncilMeeting[] }) {
+  const [first] = meetings;
+  const names = meetings.map((m) => m.name).join("・");
+
+  return (
+    <div className="-mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[13px] font-bold text-mirai-text-secondary">
+      <span className="whitespace-nowrap">次の開会日</span>
+      <span className="whitespace-nowrap text-mirai-brand-teal-deep">
+        {formatMeetingDateRange(first.meeting_date, first.end_date)}
+      </span>
+      <span>{names}</span>
     </div>
   );
 }
