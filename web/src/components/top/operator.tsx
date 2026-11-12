@@ -28,7 +28,7 @@ const OPERATOR_SNS = [
   },
   {
     name: "LINE",
-    url: "https://lin.ee/HaHeS7R",
+    url: "https://line.gorisan.tech/gikai-web/",
     iconPath: "/icons/sns/icon_line.png",
   },
   {
@@ -92,7 +92,7 @@ export function Operator() {
           {/* ボタングループ */}
           <div className="flex flex-col gap-4">
             <LinkButton
-              href="https://lin.ee/HaHeS7R"
+              href="https://line.gorisan.tech/gikai-web/"
               icon={{
                 src: "/icons/sns/icon_line.png",
                 alt: "",

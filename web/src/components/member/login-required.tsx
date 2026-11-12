@@ -17,7 +17,7 @@ import {
   recheckUrl,
 } from "@/lib/member/client";
 
-const LINE_ADD = "https://lin.ee/HaHeS7R";
+const LINE_ADD = "https://line.gorisan.tech/gikai-web/";
 
 function useLoginNotice() {
   // LINEログインから戻ったときの ?login=cancel|error|notfriend と、ログイン後に戻る今のページ
