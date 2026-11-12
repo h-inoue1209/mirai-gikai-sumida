@@ -11,8 +11,10 @@ import {
   useRef,
   useState,
 } from "react";
+import { LoginRequiredDialog } from "@/components/member/login-required";
 import { Button } from "@/components/ui/button";
 import type { BillWithContent } from "@/features/bills/shared/types";
+import { currentMember, trackMember, useMember } from "@/lib/member/client";
 import { ChatWindow } from "./chat-window";
 
 // アニメーション定数
@@ -51,7 +53,31 @@ export const ChatButton = forwardRef<ChatButtonRef, ChatButtonProps>(
     const pathname = usePathname();
 
     // Chat state をここで管理することで、モーダルが閉じても状態が保持される
-    const chatState = useChat();
+    const rawChatState = useChat();
+
+    // AIへの質問は LINE公式の友だち（会員）だけ（2026-11-13 本人指示）。送る前に確かめ、会員でなければ案内を出す
+    const member = useMember();
+    const [loginOpen, setLoginOpen] = useState(false);
+    const usedRef = useRef(false);
+    const chatState = useMemo(
+      () => ({
+        ...rawChatState,
+        sendMessage: (async (
+          ...args: Parameters<typeof rawChatState.sendMessage>
+        ) => {
+          if ((await currentMember()) !== "member") {
+            setLoginOpen(true);
+            return;
+          }
+          if (!usedRef.current) {
+            usedRef.current = true;
+            trackMember("chat_used");
+          }
+          return rawChatState.sendMessage(...args);
+        }) as typeof rawChatState.sendMessage,
+      }),
+      [rawChatState]
+    );
 
     // pathname が変わるたびに新しいセッションIDを発行
     // ページ遷移時にチャットセッションをリセット
@@ -185,6 +211,11 @@ export const ChatButton = forwardRef<ChatButtonRef, ChatButtonProps>(
           disableAutoFocus={openedWithText}
           returnFocusRef={chatTriggerRef}
           sessionId={sessionId}
+        />
+        <LoginRequiredDialog
+          open={loginOpen}
+          onOpenChange={setLoginOpen}
+          state={member}
         />
       </>
     );

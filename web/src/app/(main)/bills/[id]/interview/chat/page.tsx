@@ -2,12 +2,14 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
+import { LoginRequiredBody } from "@/components/member/login-required";
 import { getBillById } from "@/features/bills/server/loaders/get-bill-by-id";
 import { getInterviewConfig } from "@/features/interview-config/server/loaders/get-interview-config";
 import { getInterviewQuestions } from "@/features/interview-config/server/loaders/get-interview-questions";
 import { InterviewChatClient } from "@/features/interview-session/client/components/interview-chat-client";
 import { InterviewSessionErrorView } from "@/features/interview-session/client/components/interview-session-error-view";
 import { initializeInterviewChat } from "@/features/interview-session/server/loaders/initialize-interview-chat";
+import { getMemberState } from "@/lib/member/server";
 
 interface InterviewChatPageProps {
   params: Promise<{
@@ -28,6 +30,18 @@ export default async function InterviewChatPage({
 
   if (!bill || !interviewConfig) {
     notFound();
+  }
+
+  // AIインタビューは LINE公式の友だち（会員）だけ（2026-11-13 本人指示）。会員でなければセッションを作らずに案内だけ出す
+  const memberState = await getMemberState();
+  if (memberState !== "member") {
+    return (
+      <div className="mx-auto max-w-[560px] px-6 py-12">
+        <div className="rounded-2xl border-2 border-[#06c755] bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,.14)]">
+          <LoginRequiredBody state={memberState} what="AIインタビュー" />
+        </div>
+      </div>
+    );
   }
 
   // ループモードの場合のみ質問数を取得（プログレスバー用）

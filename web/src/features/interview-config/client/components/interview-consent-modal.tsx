@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getInterviewChatLink } from "@/features/interview-config/shared/utils/interview-links";
+import { trackMember } from "@/lib/member/client";
 import { routes } from "@/lib/routes";
 
 interface InterviewConsentModalProps {
@@ -35,6 +36,7 @@ export function InterviewConsentModal({
   const handleAgree = () => {
     if (!agreed) return;
     setIsLoading(true);
+    trackMember("interview_start");
     const destination = getInterviewChatLink(billId, previewToken);
     router.push(destination as Route);
   };

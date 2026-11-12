@@ -5,11 +5,13 @@ import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { LoginRequiredDialog } from "@/components/member/login-required";
 import { Button } from "@/components/ui/button";
 import { getInterviewChatLink } from "@/features/interview-config/shared/utils/interview-links";
 import { NewInterviewButton } from "@/features/interview-session/client/components/new-interview-button";
 import { RestartInterviewButton } from "@/features/interview-session/client/components/restart-interview-button";
 import type { LatestInterviewSession } from "@/features/interview-session/server/loaders/get-latest-interview-session";
+import { useMember } from "@/lib/member/client";
 import { InterviewConsentModal } from "./interview-consent-modal";
 
 interface InterviewActionButtonsProps {
@@ -18,7 +20,37 @@ interface InterviewActionButtonsProps {
   previewToken?: string;
 }
 
-export function InterviewActionButtons({
+// AIインタビューは LINE公式の友だち（会員）だけ（2026-11-13 本人指示）。
+// 会員でない方がボタンを押すと、遷移の前に LINE でログインの案内を出す
+export function InterviewActionButtons(props: InterviewActionButtonsProps) {
+  const member = useMember();
+  const [loginOpen, setLoginOpen] = useState(false);
+  return (
+    <>
+      <div
+        className="contents"
+        onClickCapture={(e) => {
+          if (member === "member") return;
+          const el = (e.target as HTMLElement).closest("a,button");
+          if (!el) return;
+          e.preventDefault();
+          e.stopPropagation();
+          setLoginOpen(true);
+        }}
+      >
+        <InterviewActionButtonsInner {...props} />
+      </div>
+      <LoginRequiredDialog
+        open={loginOpen}
+        onOpenChange={setLoginOpen}
+        state={member}
+        what="AIインタビュー"
+      />
+    </>
+  );
+}
+
+function InterviewActionButtonsInner({
   billId,
   sessionInfo,
   previewToken,

@@ -5,8 +5,12 @@ import {
   isInvalidOptionalBooleanInput,
   parseOptionalBoolean,
 } from "@/features/interview-session/shared/utils/optional-boolean";
+import { isMemberRequest, memberRequiredResponse } from "@/lib/member/server";
 
 export async function POST(req: Request) {
+  // LINE公式の友だち（会員）だけが使える（2026-11-13 本人指示。会員の情報は子育てポータルが持つ）
+  if (!(await isMemberRequest(req))) return memberRequiredResponse();
+
   const { sessionId, isPublic, isDataReuseConsented } = await req.json();
   const isPublicByUser = parseOptionalBoolean(isPublic);
   const dataReuseConsented = parseOptionalBoolean(isDataReuseConsented);

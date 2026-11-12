@@ -1,3 +1,5 @@
+import { trackMember } from "@/lib/member/client";
+
 interface CompleteInterviewParams {
   sessionId: string;
   isPublic: boolean;
@@ -27,5 +29,6 @@ export async function callCompleteApi(
     throw new Error(data.error || "Failed to complete interview");
   }
 
+  trackMember("interview_complete");
   return (await res.json()) as CompleteInterviewResult;
 }

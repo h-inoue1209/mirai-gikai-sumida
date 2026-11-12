@@ -18,6 +18,15 @@ const chatWindowMock = vi.hoisted(() => ({
 }));
 
 vi.mock("@ai-sdk/react", () => ({ useChat: useChatMock }));
+const memberMock = vi.hoisted(() => ({ state: "member" as string }));
+vi.mock("@/lib/member/client", () => ({
+  useMember: () => memberMock.state,
+  currentMember: async () => memberMock.state,
+  trackMember: vi.fn(),
+  loginUrl: () => "http://localhost:3010/line",
+  recheckUrl: () => "http://localhost:3010/api/auth/recheck",
+  KODOMO_ORIGIN: "http://localhost:3010",
+}));
 vi.mock("next/navigation", () => ({ usePathname: usePathnameMock }));
 vi.mock("next/image", () => ({
   default: ({ alt }: { alt: string }) => <span role="img" aria-label={alt} />,
@@ -99,6 +108,7 @@ describe("ChatButton", () => {
 
     act(() => ref.current?.openWithText("選択した本文"));
 
+    await vi.waitFor(() => expect(sendMessage).toHaveBeenCalled());
     expect(sendMessage).toHaveBeenCalledWith({
       text: "「選択した本文」について教えてください。",
       metadata: {
@@ -134,5 +144,18 @@ describe("ChatButton", () => {
 
     expect(sendMessage).not.toHaveBeenCalled();
     expect(chatWindowMock.props?.isOpen).toBe(false);
+  });
+
+  it("会員（LINE公式の友だち）でなければ送らずにLINEログインの案内を出す", async () => {
+    memberMock.state = "none";
+    const sendMessage = vi.fn();
+    useChatMock.mockReturnValue({ messages: [], sendMessage, status: "ready" });
+    const { ref } = renderChatButton();
+
+    act(() => ref.current?.openWithText("選択した本文"));
+
+    expect(await screen.findByText("LINEでログイン")).toBeInTheDocument();
+    expect(sendMessage).not.toHaveBeenCalled();
+    memberMock.state = "member";
   });
 });

@@ -1,17 +1,21 @@
-import { getChatSupabaseUser } from "@/features/chat/server/utils/supabase-server";
 import {
   checkSystemDailyCostLimit,
   checkSystemMonthlyCostLimit,
 } from "@/features/chat/server/services/system-cost-guard";
 import { chatErrorToResponse } from "@/features/chat/server/utils/chat-error-response";
+import { getChatSupabaseUser } from "@/features/chat/server/utils/supabase-server";
 import { handleInterviewChatRequest } from "@/features/interview-session/server/services/handle-interview-chat-request";
 import { jsonResponse } from "@/lib/api/response";
+import { isMemberRequest, memberRequiredResponse } from "@/lib/member/server";
 import { registerNodeTelemetry } from "@/lib/telemetry/register";
 
 export async function POST(req: Request) {
   // Vercel node環境でinstrumentationが自動で起動しない問題対応
   // 明示的にtelemetryを初期化
   await registerNodeTelemetry();
+
+  // LINE公式の友だち（会員）だけが使える（2026-11-13 本人指示。会員の情報は子育てポータルが持つ）
+  if (!(await isMemberRequest(req))) return memberRequiredResponse();
 
   const body = await req.json();
   const {

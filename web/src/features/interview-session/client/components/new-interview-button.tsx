@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getInterviewChatLink } from "@/features/interview-config/shared/utils/interview-links";
+import { trackMember } from "@/lib/member/client";
 
 interface NewInterviewButtonProps {
   billId: string;
@@ -21,6 +22,7 @@ export function NewInterviewButton({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
+    trackMember("interview_start");
     setIsLoading(true);
     const chatLink = getInterviewChatLink(billId, previewToken);
     router.push(chatLink as Route);
