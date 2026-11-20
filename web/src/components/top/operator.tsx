@@ -90,9 +90,9 @@ export function Operator() {
           </p>
 
           <p className="text-sm leading-[24px] text-black">
-            墨田区のイベント・催しと、子育て・区のお金などテーマ別のサイトは{" "}
+            墨田区のイベント・催し、子育て・区のお金などテーマ別のサイトは{" "}
             <a
-              href="https://sumida-event.gorisan.info/"
+              href="https://sumida.gorisan.info/"
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-primary-accent"

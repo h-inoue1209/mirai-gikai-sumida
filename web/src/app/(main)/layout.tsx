@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { AuthGate } from "@/components/layouts/auth-gate";
 import { Footer } from "@/components/layouts/footer/footer";
 import { MainLayout } from "@/components/layouts/main-layout";
+import { SiteBand } from "@/components/layouts/site-band";
 import { env } from "@/lib/env";
 import { RubyfulInitializer } from "@/lib/rubyful";
 
@@ -19,6 +20,7 @@ export default function MainGroupLayout({
       <GoogleAnalytics gaId={env.analytics.gaTrackingId ?? ""} />
       <RubyfulInitializer />
       <AuthGate />
+      <SiteBand />
 
       <MainLayout>
         <Header />

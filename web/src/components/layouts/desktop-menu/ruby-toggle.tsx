@@ -10,7 +10,7 @@ export function DesktopMenuRubyToggle() {
   const { rubyEnabled, handleRubyToggle } = useRubyToggle();
 
   return (
-    <div className="fixed top-[108px] right-6 z-50">
+    <div className="fixed top-[136px] right-6 z-50">
       <div
         className="bg-white flex items-center gap-6 font-bold text-black"
         style={{
