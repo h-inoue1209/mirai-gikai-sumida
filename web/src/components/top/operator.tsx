@@ -89,6 +89,19 @@ export function Operator() {
             このサイトは議員個人が運営しています。墨田区議会・墨田区の公式サイトではありません。ご意見や不具合のご連絡は、議会事務局や区役所ではなく、下のLINE公式アカウントからお寄せください。
           </p>
 
+          <p className="text-sm leading-[24px] text-black">
+            墨田区のイベント・催しと、子育て・区のお金などテーマ別のサイトは{" "}
+            <a
+              href="https://sumida-event.gorisan.info/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-primary-accent"
+            >
+              すみだポータル
+            </a>
+            から。
+          </p>
+
           {/* ボタングループ */}
           <div className="flex flex-col gap-4">
             <LinkButton
