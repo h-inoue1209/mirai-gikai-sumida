@@ -342,6 +342,213 @@ export type Database = {
           },
         ]
       }
+      advisory_councils: {
+        Row: {
+          created_at: string
+          field: string
+          id: string
+          latest_minutes_date: string | null
+          latest_minutes_title: string | null
+          latest_minutes_url: string | null
+          minutes_count: number
+          name: string
+          page_title: string | null
+          page_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          field: string
+          id?: string
+          latest_minutes_date?: string | null
+          latest_minutes_title?: string | null
+          latest_minutes_url?: string | null
+          minutes_count?: number
+          name: string
+          page_title?: string | null
+          page_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          field?: string
+          id?: string
+          latest_minutes_date?: string | null
+          latest_minutes_title?: string | null
+          latest_minutes_url?: string | null
+          minutes_count?: number
+          name?: string
+          page_title?: string | null
+          page_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      advisory_meetings: {
+        Row: {
+          agenda: string | null
+          as_of: string | null
+          capacity: string | null
+          contact_section: string | null
+          created_at: string
+          id: string
+          is_public: boolean | null
+          meeting_date: string
+          name: string
+          place: string | null
+          procedure: string | null
+          public_text: string | null
+          source_url: string
+          time_text: string | null
+          updated_at: string
+        }
+        Insert: {
+          agenda?: string | null
+          as_of?: string | null
+          capacity?: string | null
+          contact_section?: string | null
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          meeting_date: string
+          name: string
+          place?: string | null
+          procedure?: string | null
+          public_text?: string | null
+          source_url: string
+          time_text?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agenda?: string | null
+          as_of?: string | null
+          capacity?: string | null
+          contact_section?: string | null
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          meeting_date?: string
+          name?: string
+          place?: string | null
+          procedure?: string | null
+          public_text?: string | null
+          source_url?: string
+          time_text?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contract_openings: {
+        Row: {
+          bid_method: string | null
+          created_at: string
+          deadline: string | null
+          department: string | null
+          id: string
+          kind: string
+          place: string | null
+          schedule_text: string | null
+          source_url: string
+          status: string
+          summary: string | null
+          title: string
+          work_type: string | null
+        }
+        Insert: {
+          bid_method?: string | null
+          created_at?: string
+          deadline?: string | null
+          department?: string | null
+          id?: string
+          kind: string
+          place?: string | null
+          schedule_text?: string | null
+          source_url: string
+          status: string
+          summary?: string | null
+          title: string
+          work_type?: string | null
+        }
+        Update: {
+          bid_method?: string | null
+          created_at?: string
+          deadline?: string | null
+          department?: string | null
+          id?: string
+          kind?: string
+          place?: string | null
+          schedule_text?: string | null
+          source_url?: string
+          status?: string
+          summary?: string | null
+          title?: string
+          work_type?: string | null
+        }
+        Relationships: []
+      }
+      contracts: {
+        Row: {
+          amount_text: string | null
+          amount_yen: number | null
+          category: string
+          contract_date: string | null
+          created_at: string
+          department: string | null
+          fiscal_year: number | null
+          id: string
+          industry: string | null
+          kind: string
+          legal_basis: string | null
+          planned_price_text: string | null
+          planned_price_yen: number | null
+          reason: string | null
+          remarks: string | null
+          source_url: string
+          title: string
+          vendor: string | null
+        }
+        Insert: {
+          amount_text?: string | null
+          amount_yen?: number | null
+          category: string
+          contract_date?: string | null
+          created_at?: string
+          department?: string | null
+          fiscal_year?: number | null
+          id?: string
+          industry?: string | null
+          kind: string
+          legal_basis?: string | null
+          planned_price_text?: string | null
+          planned_price_yen?: number | null
+          reason?: string | null
+          remarks?: string | null
+          source_url: string
+          title: string
+          vendor?: string | null
+        }
+        Update: {
+          amount_text?: string | null
+          amount_yen?: number | null
+          category?: string
+          contract_date?: string | null
+          created_at?: string
+          department?: string | null
+          fiscal_year?: number | null
+          id?: string
+          industry?: string | null
+          kind?: string
+          legal_basis?: string | null
+          planned_price_text?: string | null
+          planned_price_yen?: number | null
+          reason?: string | null
+          remarks?: string | null
+          source_url?: string
+          title?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
       council_meetings: {
         Row: {
           category: string

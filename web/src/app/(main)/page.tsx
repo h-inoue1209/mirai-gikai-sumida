@@ -3,6 +3,7 @@ import { Container } from "@/components/layouts/container";
 import { About } from "@/components/top/about";
 import { ComingSoonSection } from "@/components/top/coming-soon-section";
 import { Operator } from "@/components/top/operator";
+import { KuseiLinksSection } from "@/features/advisory-councils/server/components/kusei-links-section";
 import { getDifficultyLevel } from "@/features/bill-difficulty/server/loaders/get-difficulty-level";
 import { BillDisclaimer } from "@/features/bills/client/components/bill-detail/bill-disclaimer";
 import { BillSearchOverlay } from "@/features/bills/client/components/bill-search-overlay";
@@ -128,6 +129,9 @@ export default async function Home() {
                 UPCOMING_MEETING_DAYS
               )}
             />
+
+            {/* 区の審議会・入札と契約への入口（区サイトの公開情報） */}
+            <KuseiLinksSection />
 
             {/*
               注目の法案は会期中だけ出す。閉会中に「注目」を掲げても、審議が

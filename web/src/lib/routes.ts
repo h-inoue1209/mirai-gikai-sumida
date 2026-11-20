@@ -18,6 +18,10 @@ export const routes = {
   // ── 会議予定 ──────────────────────────────────────
   schedule: () => "/schedule" as const,
 
+  // ── 区の審議会・入札と契約（区サイトの公開情報）────────────
+  councils: () => "/councils" as const,
+  contracts: () => "/contracts" as const,
+
   // ── 議案 ──────────────────────────────────────────
   billsList: () => "/bills" as const,
   billDetail: (billId: string) => `/bills/${billId}` as const,

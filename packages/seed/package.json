@@ -10,7 +10,9 @@
     "seed:sumida": "tsx sumida/run.ts",
     "sync:sumida": "tsx sumida/sync.ts",
     "import:meetings": "tsx sumida/import-meetings.ts",
-    "import:past-meetings": "tsx sumida/import-past-meetings.ts"
+    "import:past-meetings": "tsx sumida/import-past-meetings.ts",
+    "import:councils": "tsx sumida/import-councils.ts",
+    "import:contracts": "tsx sumida/import-contracts.ts"
   },
   "dependencies": {
     "@mirai-gikai/supabase": "workspace:*",
