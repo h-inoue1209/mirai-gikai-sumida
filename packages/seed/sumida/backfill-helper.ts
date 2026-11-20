@@ -45,10 +45,23 @@ export type BillSpec = {
   hardResults?: string[];
 };
 
-export function createBackfill(sourceLabel: string) {
+export type BackfillOptions = {
+  /** 出典の注記を差し替える（会議録の公開前に区サイトの議案資料から作るときなど） */
+  sourceNote?: string;
+  /** 出典リンク（既定は会議録検索システム） */
+  url?: string;
+  /** 公開日時（既定は 2026-10-22 のさかのぼり投入日） */
+  publishedAt?: string;
+};
+
+export function createBackfill(sourceLabel: string, opts: BackfillOptions = {}) {
   const bills: Tagged[] = [];
   const contents: Content[] = [];
-  const sourceNote = `---
+  const url = opts.url ?? KAIGIROKU_URL;
+  const publishedAt = opts.publishedAt ?? "2026-10-22T09:00:00+09:00";
+  const sourceNote =
+    opts.sourceNote ??
+    `---
 
 **出典**：墨田区議会 会議録（${sourceLabel}）。
 この解説は会議録をもとにAIで整理したものです。正確な内容は会議録・議案の原文をご確認ください。`;
@@ -60,8 +73,8 @@ export function createBackfill(sourceLabel: string) {
       status_note: s.note,
       submitted_date: `${s.submitted}T10:00:00+09:00`,
       publish_status: "published",
-      published_at: "2026-10-22T09:00:00+09:00",
-      shugiin_url: KAIGIROKU_URL,
+      published_at: publishedAt,
+      shugiin_url: url,
       name: s.name,
       tag: s.tag,
       ...(s.featured ? { is_featured: true } : {}),
@@ -120,8 +133,8 @@ ${sourceNote}`,
       status_note: r.note,
       submitted_date: `${r.date}T10:00:00+09:00`,
       publish_status: "published",
-      published_at: "2026-10-22T09:00:00+09:00",
-      shugiin_url: KAIGIROKU_URL,
+      published_at: publishedAt,
+      shugiin_url: url,
       name: r.name,
       tag: r.tag,
       ...(r.featured ? { is_featured: true } : {}),

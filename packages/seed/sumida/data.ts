@@ -16,6 +16,12 @@ import { pastReportBills, pastReportContents } from "./houkoku-all";
 import { tokubetsuBills, tokubetsuContents } from "./data-r8-tokubetsu";
 import { houkokuBills, houkokuContents } from "./data-r8-06-houkoku";
 import { restBills, restContents } from "./data-r8-06-rest";
+import {
+  r8SeptBills,
+  r8SeptContents,
+  r8SeptReportBills,
+  r8SeptReportContents,
+} from "./data-r8-09";
 
 type BillInsert = Database["public"]["Tables"]["bills"]["Insert"];
 type TagInsert = Database["public"]["Tables"]["tags"]["Insert"];
@@ -129,6 +135,8 @@ export const bills: (BillInsert & { tag: string })[] = [
     tag: "区政運営",
   },
   ...restBills,
+  ...r8SeptBills,
+  ...r8SeptReportBills,
   ...houkokuBills,
   ...planBills,
   ...tokubetsuBills,
@@ -368,6 +376,8 @@ ${SOURCE_NOTE}`,
 ${SOURCE_NOTE}`,
   },
   ...restContents,
+  ...r8SeptContents,
+  ...r8SeptReportContents,
   ...houkokuContents,
   ...planContents,
   ...tokubetsuContents,
