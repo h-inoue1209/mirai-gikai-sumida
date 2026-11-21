@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FALLBACK, ThemeDetails } from "@/components/layouts/site-band";
 import { DifficultySelector } from "@/features/bill-difficulty/client/components/difficulty-selector";
 import type { DifficultyLevelEnum } from "@/features/bill-difficulty/shared/types";
 import { InterviewHeaderActions } from "@/features/interview-session/client/components/interview-header-actions";
@@ -28,7 +29,7 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
   useOnPageView(() => sendDifficultyStateEvent(difficultyLevel));
 
   return (
-    <header className="px-3 fixed top-11 left-0 right-0 z-40 max-w-[1440px] mx-auto">
+    <header className="px-3 fixed top-4 min-[641px]:top-[60px] left-0 right-0 z-40 max-w-[1440px] mx-auto">
       <div className="rounded-2xl bg-white shadow-sm mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo / Site Title */}
@@ -62,6 +63,10 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
               <DifficultySelector currentLevel={difficultyLevel} />
             )}
             {showInterviewActions && <InterviewHeaderActions />}
+            {/* スマホだけ：すみだポータルの「他のテーマのサイト」（帯は出さない。本人 11/21） */}
+            <span className="min-[641px]:hidden">
+              <ThemeDetails sites={FALLBACK} variant="head" />
+            </span>
             <HamburgerMenu />
           </nav>
         </div>

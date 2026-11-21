@@ -3,6 +3,7 @@ import { Container } from "@/components/layouts/container";
 import { About } from "@/components/top/about";
 import { ComingSoonSection } from "@/components/top/coming-soon-section";
 import { Operator } from "@/components/top/operator";
+import { OtherSites } from "@/components/top/other-sites";
 import { KuseiLinksSection } from "@/features/advisory-councils/server/components/kusei-links-section";
 import { getDifficultyLevel } from "@/features/bill-difficulty/server/loaders/get-difficulty-level";
 import { BillDisclaimer } from "@/features/bills/client/components/bill-detail/bill-disclaimer";
@@ -173,6 +174,9 @@ export default async function Home() {
       )}
 
       <Container>
+        {/* すみだポータルのテーマ別のサイト（2026-11-21） */}
+        <OtherSites />
+
         {/* このサイトについて セクション */}
         <About />
 

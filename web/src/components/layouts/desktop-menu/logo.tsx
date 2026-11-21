@@ -9,7 +9,7 @@ export function DesktopMenuLogo() {
   return (
     <Link
       href={routes.home()}
-      className="fixed top-[52px] left-6 z-50 flex items-center gap-6 hover:opacity-90 transition-opacity"
+      className="fixed top-[68px] left-6 z-50 flex items-center gap-6 hover:opacity-90 transition-opacity"
     >
       {/* ロゴ */}
       <div className="relative w-[116px] h-[98.38px]">

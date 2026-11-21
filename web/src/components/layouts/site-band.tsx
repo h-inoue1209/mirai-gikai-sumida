@@ -2,7 +2,7 @@
 // 2026-11-21 再編：ほかのサイトは「テーマ別のサイト▾」にたたむ（本人決定）。マークは線の絵、色はサイトごと
 // 画面の最上部に固定（ヘッダーが浮いた形なので、帯の高さ 28px 分だけヘッダーを下げている：header-client.tsx の top-11）
 // 並びは親の https://sumida.gorisan.info/sites.json を1日1回読む。読めないときは下の控え
-type BandSite = {
+export type BandSite = {
   id: string;
   short: string;
   url: string;
@@ -12,7 +12,7 @@ type BandSite = {
 };
 
 const PARENT_URL = "https://sumida.gorisan.info";
-const FALLBACK: BandSite[] = [
+export const FALLBACK: BandSite[] = [
   {
     id: "event",
     short: "イベント",
@@ -92,7 +92,7 @@ const PATHS: Record<string, string[]> = {
   ],
 };
 
-async function getSites(): Promise<BandSite[]> {
+export async function getSites(): Promise<BandSite[]> {
   try {
     const res = await fetch(`${PARENT_URL}/sites.json`, {
       next: { revalidate: 86400 },
@@ -111,7 +111,7 @@ async function getSites(): Promise<BandSite[]> {
   return FALLBACK;
 }
 
-function Mark({ id, color }: { id: string; color?: string }) {
+export function Mark({ id, color }: { id: string; color?: string }) {
   return (
     <span
       aria-hidden
@@ -138,57 +138,102 @@ function Mark({ id, color }: { id: string; color?: string }) {
   );
 }
 
+/** 「他のテーマのサイト▾」（帯＝PC と、ヘッダー＝スマホの両方で使う。本人 11/21「テーマ別のサイト→他のテーマのサイト」） */
+export function ThemeDetails({
+  sites,
+  variant,
+}: {
+  sites: BandSite[];
+  variant: "band" | "head";
+}) {
+  const summary =
+    variant === "band"
+      ? "cursor-pointer list-none rounded-full border border-white/35 px-4 py-1.5 text-sm hover:bg-white/10 group-open:bg-white/10 [&::-webkit-details-marker]:hidden"
+      : "cursor-pointer list-none rounded-full border-[1.5px] border-[#d6e5f1] bg-white px-3 py-1.5 text-[13px] font-bold leading-tight text-[#23364a] group-open:bg-[#eaf4fc] [&::-webkit-details-marker]:hidden";
+  return (
+    <details
+      className={`group relative ${variant === "band" ? "ml-auto" : ""}`}
+    >
+      {variant === "band" ? (
+        <summary className={summary}>他のテーマのサイト ▾</summary>
+      ) : (
+        // スマホ：ハンバーガーと同じ「絵＋小さな字」の形（本人 11/21）
+        <summary
+          aria-label="他のテーマのサイト"
+          className="grid cursor-pointer list-none justify-items-center gap-0.5 rounded-lg px-1.5 py-1 text-[#23364a] group-open:bg-[#eaf4fc] [&::-webkit-details-marker]:hidden"
+        >
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            width={22}
+            height={22}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="4" y="4" width="6" height="6" rx="1" />
+            <rect x="14" y="4" width="6" height="6" rx="1" />
+            <rect x="4" y="14" width="6" height="6" rx="1" />
+            <rect x="14" y="14" width="6" height="6" rx="1" />
+          </svg>
+          {/* みらい議会のスマホのヘッダーは元から詰まっている（難易度の切り替え）ので字は出さず絵だけ。読み上げは aria-label */}
+        </summary>
+      )}
+      <div
+        className={`z-[70] rounded-2xl bg-white p-2 text-[#23364a] shadow-xl ${variant === "band" ? "absolute right-0 top-[calc(100%+8px)] w-[min(340px,calc(100vw-32px))]" : "fixed left-3 right-3 top-[84px]"}`}
+      >
+        <ul className="grid gap-0.5">
+          {sites.map((s) => (
+            <li key={s.id}>
+              <a
+                href={s.url}
+                aria-current={s.id === "gikai" ? "page" : undefined}
+                className="flex items-center gap-2.5 rounded-xl p-2.5 hover:bg-[#eaf4fc] aria-[current=page]:bg-[#eaf4fc]"
+              >
+                <Mark id={s.mark ?? s.id} color={s.color} />
+                <span>
+                  <b className="block text-[15px] leading-tight">{s.short}</b>
+                  <small className="block text-xs leading-snug text-[#5d7186]">
+                    {s.text}
+                  </small>
+                </span>
+              </a>
+            </li>
+          ))}
+          <li className="mt-1 border-t border-[#d6e5f1] pt-1 text-right">
+            <a
+              href={PARENT_URL}
+              className="inline-block px-2.5 py-2 text-[13px] font-bold text-[#1680d6]"
+            >
+              すみだポータルのトップへ →
+            </a>
+          </li>
+        </ul>
+      </div>
+    </details>
+  );
+}
+
+// 帯は PC（幅641px以上）だけ。太さ 44px（本人 11/21「狭くて押しづらい」）。スマホは header-client.tsx のハンバーガーの左横に ThemeDetails
 export async function SiteBand() {
   const sites = await getSites();
   return (
     <>
       <nav
         aria-label="すみだポータル"
-        className="fixed top-0 left-0 right-0 z-[60] h-7 bg-[#23364a] text-white text-[13px]"
+        className="fixed top-0 left-0 right-0 z-[60] h-11 bg-[#23364a] text-sm text-white max-[640px]:hidden"
       >
         <div className="mx-auto flex h-full max-w-[1440px] items-center gap-3 px-4">
           <a href={PARENT_URL} className="font-bold tracking-wide">
             すみだポータル
           </a>
-          <details className="group relative ml-auto">
-            <summary className="cursor-pointer list-none rounded-full border border-white/35 px-3 py-px hover:bg-white/10 group-open:bg-white/10 [&::-webkit-details-marker]:hidden">
-              テーマ別のサイト ▾
-            </summary>
-            <div className="absolute right-0 top-[calc(100%+8px)] w-[min(340px,calc(100vw-32px))] rounded-2xl bg-white p-2 text-[#23364a] shadow-xl">
-              <ul className="grid gap-0.5">
-                {sites.map((s) => (
-                  <li key={s.id}>
-                    <a
-                      href={s.url}
-                      aria-current={s.id === "gikai" ? "page" : undefined}
-                      className="flex items-center gap-2.5 rounded-xl px-2.5 py-2 hover:bg-[#eaf4fc] aria-[current=page]:bg-[#eaf4fc]"
-                    >
-                      <Mark id={s.mark ?? s.id} color={s.color} />
-                      <span>
-                        <b className="block text-[15px] leading-tight">
-                          {s.short}
-                        </b>
-                        <small className="block text-xs leading-snug text-[#5d7186]">
-                          {s.text}
-                        </small>
-                      </span>
-                    </a>
-                  </li>
-                ))}
-                <li className="mt-1 border-t border-[#d6e5f1] pt-1 text-right">
-                  <a
-                    href={PARENT_URL}
-                    className="inline-block px-2.5 py-2 text-[13px] font-bold text-[#1680d6]"
-                  >
-                    すみだポータルのトップへ →
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </details>
+          <ThemeDetails sites={sites} variant="band" />
         </div>
       </nav>
-      <div aria-hidden className="h-7" />
+      <div aria-hidden className="h-11 max-[640px]:hidden" />
     </>
   );
 }
