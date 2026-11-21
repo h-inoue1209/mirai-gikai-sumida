@@ -183,7 +183,7 @@ export function ThemeDetails({
         </summary>
       )}
       <div
-        className={`z-[70] rounded-2xl bg-white p-2 text-[#23364a] shadow-xl ${variant === "band" ? "absolute right-0 top-[calc(100%+8px)] w-[min(340px,calc(100vw-32px))]" : "fixed left-3 right-3 top-[84px]"}`}
+        className={`z-[70] rounded-2xl bg-white p-2 text-[#23364a] shadow-xl ${variant === "band" ? "absolute right-0 top-[calc(100%+8px)] w-[min(340px,calc(100vw-32px))]" : "fixed right-3 top-[84px] w-[min(360px,calc(100vw-24px))]"}`}
       >
         <ul className="grid gap-0.5">
           {sites.map((s) => (

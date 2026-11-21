@@ -8,7 +8,7 @@ export async function DesktopMenuDifficultyToggle() {
   const currentLevel = await getDifficultyLevel();
 
   return (
-    <div className="fixed top-[68px] right-6 z-50 w-83">
+    <div className="fixed top-6 right-6 z-50 w-83">
       <div
         className="bg-white flex items-center gap-6 font-bold text-black"
         style={{

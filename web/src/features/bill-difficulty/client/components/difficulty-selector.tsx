@@ -70,7 +70,7 @@ export function DifficultySelector({
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-bold" style={labelStyle}>
+      <span className="whitespace-nowrap text-sm font-bold" style={labelStyle}>
         <span className="hidden md:inline-block">説明をもっと</span>
         詳しく
       </span>
