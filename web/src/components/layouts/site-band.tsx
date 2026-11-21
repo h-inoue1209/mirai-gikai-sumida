@@ -118,22 +118,27 @@ export function Mark({ id, color }: { id: string; color?: string }) {
       className="inline-grid size-[30px] shrink-0 place-items-center rounded-full text-white"
       style={{ background: color ?? "#23364a" }}
     >
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        width={18}
-        height={18}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {(PATHS[id] ?? []).map((d) => (
-          <path key={d} d={d} />
-        ))}
-      </svg>
+      {/* すみだポータル（親）は絵ではなく「す」の字（本人 11/21） */}
+      {id === "top" ? (
+        <span className="text-base font-black leading-none">す</span>
+      ) : (
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          width={18}
+          height={18}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {(PATHS[id] ?? []).map((d) => (
+            <path key={d} d={d} />
+          ))}
+        </svg>
+      )}
     </span>
   );
 }
@@ -189,6 +194,23 @@ export function ThemeDetails({
         className={`z-[70] rounded-2xl bg-white p-2 text-[#23364a] shadow-xl ${variant === "band" ? "absolute right-0 top-[calc(100%+8px)] w-[min(340px,calc(100vw-32px))]" : "fixed right-3 top-[84px] w-[min(360px,calc(100vw-24px))]"}`}
       >
         <ul className="grid gap-0.5">
+          {/* 先頭に親のすみだポータル（本人 11/21「他と同様に、一番先頭で」） */}
+          <li>
+            <a
+              href={PARENT_URL}
+              className="flex items-center gap-2.5 rounded-xl p-2.5 hover:bg-[#eaf4fc]"
+            >
+              <Mark id="top" color="#1680d6" />
+              <span>
+                <b className="block text-[15px] leading-tight">
+                  すみだポータル
+                </b>
+                <small className="block text-xs leading-snug text-[#5d7186]">
+                  墨田区のくらしの情報の入口
+                </small>
+              </span>
+            </a>
+          </li>
           {sites.map((s) => (
             <li key={s.id}>
               <a
@@ -206,14 +228,6 @@ export function ThemeDetails({
               </a>
             </li>
           ))}
-          <li className="mt-1 border-t border-[#d6e5f1] pt-1 text-right">
-            <a
-              href={PARENT_URL}
-              className="inline-block px-2.5 py-2 text-[13px] font-bold text-[#1680d6]"
-            >
-              すみだポータルのトップへ →
-            </a>
-          </li>
         </ul>
       </div>
     </details>
