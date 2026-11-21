@@ -30,6 +30,14 @@ export const FALLBACK: BandSite[] = [
     text: "保育園・学童の空きと、指数の目安",
   },
   {
+    id: "chokai",
+    short: "町会・自治会",
+    url: "https://sumida-chokai.gorisan.info",
+    mark: "chokai",
+    color: "#3B6D11",
+    text: "住所や地図から、町会・自治会をさがす",
+  },
+  {
     id: "yosan",
     short: "区のお金",
     url: "https://sumida-yosan.gorisan.info",
@@ -44,14 +52,6 @@ export const FALLBACK: BandSite[] = [
     mark: "gikai",
     color: "#2aa693",
     text: "区議会の議案や議論を、わかりやすく",
-  },
-  {
-    id: "chokai",
-    short: "町会・自治会",
-    url: "https://sumida-chokai.gorisan.info",
-    mark: "chokai",
-    color: "#3B6D11",
-    text: "住所や地図から、町会・自治会をさがす",
   },
 ];
 
