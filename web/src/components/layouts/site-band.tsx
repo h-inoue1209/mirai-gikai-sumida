@@ -1,7 +1,7 @@
 // 共通の帯（すみだポータルのサイト群。設計：Claude_job/資料/すみだサイト群_全体設計.md 3.・11.）
 // 2026-11-21 再編：ほかのサイトは「テーマ別のサイト▾」にたたむ（本人決定）。マークは線の絵、色はサイトごと
 // 画面の最上部に固定（ヘッダーが浮いた形なので、帯の高さ 28px 分だけヘッダーを下げている：header-client.tsx の top-11）
-// 並びは親の https://sumida.gorisan.info/sites.json を1日1回読む。読めないときは下の控え
+// 並びは親の https://sumida.gorisan.info/sites.json を1時間ごとに読む。読めないときは下の控え
 export type BandSite = {
   id: string;
   short: string;
@@ -94,8 +94,8 @@ const PATHS: Record<string, string[]> = {
 
 export async function getSites(): Promise<BandSite[]> {
   try {
-    const res = await fetch(`${PARENT_URL}/sites.json`, {
-      next: { revalidate: 86400 },
+    const res = await fetch(`${PARENT_URL}/sites.json?v=3`, {
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const j = (await res.json()) as { sites?: BandSite[] };
