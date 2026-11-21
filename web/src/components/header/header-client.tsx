@@ -39,7 +39,8 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
 
   // 2026-11-21 本人「みらい議会のヘッダーを他のサイトに合わせて」「形もメニューも合わせる」：
   // 画面幅いっぱいの白いヘッダーに、線の絵のマーク（青緑）＋名前＋ひとこと、文字のメニュー。
-  // 説明の詳しさ・インタビュー・他のテーマのサイト・ハンバーガー（ルビ、狭い画面ではメニューも）は右側
+  // 右側は他のサイトと同じ「他のテーマ」「メニュー」（絵＋小さな字）に「説明をもっと詳しく」を足した形。
+  // 狭い画面（900px未満）の文字メニューはハンバーガーの中（他のサイトと同じ）。ルビもハンバーガーの中
   const isCurrent = (href: string) =>
     href === "/#about"
       ? false
@@ -84,26 +85,9 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
           {showInterviewActions && <InterviewHeaderActions />}
           {/* すみだポータルの「他のテーマのサイト」（黒い帯はやめ、どの幅でもここ。本人 11/21） */}
           <ThemeDetails sites={FALLBACK} variant="head" />
-          <HamburgerMenu />
+          <HamburgerMenu links={HEADER_NAV} />
         </div>
       </div>
-      {/* 狭い画面（900px未満）はメニューをヘッダーの2行目に（他のサイトと同じ。本人 11/21「他のサイトでは下に記載があるので、そうしてほしい」）
-          高さ32px：ヘッダー全体で96px＝各ページの上の余白（pt-24）に収まる */}
-      <nav
-        className="mx-auto flex h-8 max-w-[1180px] items-center gap-1 overflow-x-auto whitespace-nowrap px-2 min-[900px]:hidden [scrollbar-width:none]"
-        aria-label="メニュー（狭い画面）"
-      >
-        {HEADER_NAV.map((n) => (
-          <Link
-            key={n.href}
-            href={n.href as Route}
-            aria-current={isCurrent(n.href) ? "page" : undefined}
-            className="px-2 py-1 font-bold text-[#23364a] text-[13px] aria-[current=page]:shadow-[inset_0_-3px_0_#2aa693]"
-          >
-            {n.label}
-          </Link>
-        ))}
-      </nav>
     </header>
   );
 }

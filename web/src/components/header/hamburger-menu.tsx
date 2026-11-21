@@ -3,7 +3,6 @@
 import { Menu } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -20,14 +19,17 @@ export function HamburgerMenu({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10"
+        {/* 絵の下に「メニュー」（他のサイトと同じ形。本人 11/21「他のサイトにプラスして詳しく」） */}
+        <button
+          type="button"
+          className="grid cursor-pointer justify-items-center gap-0.5 rounded-lg px-1.5 py-1 text-[#23364a] hover:bg-[#eaf4fc]"
           aria-label="メニューを開く"
         >
-          <Menu className="h-5 w-5" />
-        </Button>
+          <Menu className="h-[22px] w-[22px]" />
+          <small className="whitespace-nowrap font-bold text-[10px] leading-tight">
+            メニュー
+          </small>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-50" align="end">
         {links.length > 0 && (

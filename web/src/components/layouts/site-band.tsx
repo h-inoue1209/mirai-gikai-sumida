@@ -179,7 +179,10 @@ export function ThemeDetails({
             <rect x="4" y="14" width="6" height="6" rx="1" />
             <rect x="14" y="14" width="6" height="6" rx="1" />
           </svg>
-          {/* みらい議会のスマホのヘッダーは元から詰まっている（難易度の切り替え）ので字は出さず絵だけ。読み上げは aria-label */}
+          {/* 絵の下に小さな字（他のサイトと同じ。本人 11/21） */}
+          <small className="whitespace-nowrap font-bold text-[10px] leading-tight">
+            他のテーマ
+          </small>
         </summary>
       )}
       <div
