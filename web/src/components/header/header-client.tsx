@@ -84,9 +84,26 @@ export function HeaderClient({ difficultyLevel }: HeaderClientProps) {
           {showInterviewActions && <InterviewHeaderActions />}
           {/* すみだポータルの「他のテーマのサイト」（黒い帯はやめ、どの幅でもここ。本人 11/21） */}
           <ThemeDetails sites={FALLBACK} variant="head" />
-          <HamburgerMenu links={HEADER_NAV} />
+          <HamburgerMenu />
         </div>
       </div>
+      {/* 狭い画面（900px未満）はメニューをヘッダーの2行目に（他のサイトと同じ。本人 11/21「他のサイトでは下に記載があるので、そうしてほしい」）
+          高さ32px：ヘッダー全体で96px＝各ページの上の余白（pt-24）に収まる */}
+      <nav
+        className="mx-auto flex h-8 max-w-[1180px] items-center gap-1 overflow-x-auto whitespace-nowrap px-2 min-[900px]:hidden [scrollbar-width:none]"
+        aria-label="メニュー（狭い画面）"
+      >
+        {HEADER_NAV.map((n) => (
+          <Link
+            key={n.href}
+            href={n.href as Route}
+            aria-current={isCurrent(n.href) ? "page" : undefined}
+            className="px-2 py-1 font-bold text-[#23364a] text-[13px] aria-[current=page]:shadow-[inset_0_-3px_0_#2aa693]"
+          >
+            {n.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }
