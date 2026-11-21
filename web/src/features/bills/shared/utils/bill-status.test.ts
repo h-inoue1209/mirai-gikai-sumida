@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getCardStatusLabel, getStatusVariant } from "./bill-status";
+import {
+  getCardStatusLabel,
+  getDateLabel,
+  getStatusVariant,
+} from "./bill-status";
 
 describe("getCardStatusLabel", () => {
   it.each([
@@ -42,5 +46,17 @@ describe("getStatusVariant", () => {
 
   it("preparing → muted", () => {
     expect(getStatusVariant("preparing")).toBe("muted");
+  });
+});
+
+describe("getDateLabel", () => {
+  it.each([
+    ["preparing", "提出予定"],
+    ["introduced", "提出"],
+    ["reported", "報告"],
+    ["special_committee", "開催"],
+    ["plan", "掲載"],
+  ] as const)("%s → %s", (status, expected) => {
+    expect(getDateLabel(status)).toBe(expected);
   });
 });

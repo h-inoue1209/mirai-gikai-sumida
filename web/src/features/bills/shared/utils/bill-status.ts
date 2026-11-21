@@ -49,6 +49,8 @@ export function getDateLabel(status: BillStatusEnum): string {
       return "開催";
     case "plan":
       return "掲載";
+    case "preparing":
+      return "提出予定";
     default:
       return "提出";
   }

@@ -22,6 +22,7 @@ import {
   r8SeptReportBills,
   r8SeptReportContents,
 } from "./data-r8-09";
+import { r8NovYoteiBills, r8NovYoteiContents } from "./data-r8-11-yotei";
 
 type BillInsert = Database["public"]["Tables"]["bills"]["Insert"];
 type TagInsert = Database["public"]["Tables"]["tags"]["Insert"];
@@ -137,6 +138,7 @@ export const bills: (BillInsert & { tag: string })[] = [
   ...restBills,
   ...r8SeptBills,
   ...r8SeptReportBills,
+  ...r8NovYoteiBills,
   ...houkokuBills,
   ...planBills,
   ...tokubetsuBills,
@@ -378,6 +380,7 @@ ${SOURCE_NOTE}`,
   ...restContents,
   ...r8SeptContents,
   ...r8SeptReportContents,
+  ...r8NovYoteiContents,
   ...houkokuContents,
   ...planContents,
   ...tokubetsuContents,
